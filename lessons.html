@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="cHeeSecaKe">
+<link rel="apple-touch-icon" href="images/logo-192.png">
+    <title>Уроки — cHeeSecaKe 1</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#7B001C">
+    <link rel="icon" href="images/logo.png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- Мобильная шапка (видна только на телефонах) -->
+<div class="mobile-header">
+    <div class="mobile-header-logo">
+        <img src="images/logo.png" alt="cHeeSecaKe" onerror="this.src='https://placehold.co/32x32/7B001C/white?text=CS'">
+        <span>cHeeSecaKe <span class="one">1</span></span>
+    </div>
+</div>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="images/logo.png" alt="cHeeSecaKe" class="sidebar-logo-img">
+                <span class="sidebar-title">cHeeSecaKe <span class="one">1</span></span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="lessons.html" class="sidebar-item">
+                    <span class="sidebar-icon">📚</span> Уроки
+                </a>
+                <a href="profile.html" class="sidebar-item">
+                    <span class="sidebar-icon">👤</span> Профиль
+                </a>
+                <a href="training.html" class="sidebar-item">
+                    <span class="sidebar-icon">🏋️</span> Тренировка
+                </a>
+                <a href="letters.html" class="sidebar-item">
+                    <span class="sidebar-icon">🔤</span> Буквы и тоны
+                </a>
+                <a href="about.html" class="sidebar-item">
+                    <span class="sidebar-icon">🍰</span> О нас
+                </a>
+            </nav>        
+        </aside>
+
+        <main class="main-content-with-sidebar">
+            <div class="lessons-content">
+                <div class="lessons-header">
+                    <h2>Ваши уроки</h2>
+                    <p>Пройдите 30 уроков и достигните HSK 1</p>
+                </div>
+                <div class="lessons-grid" id="lessonsGrid"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Модальное окно предупреждения перед первым уроком -->
+    <div id="firstLessonModal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-icon">📢</div>
+            <h3 class="modal-title">Важное уведомление!</h3>
+            <p class="modal-text">
+                Перед тем как приступить к первому уроку,<br>
+                <strong>рекомендуется выучить буквы, пиньинь и произношение</strong>.
+                Это поможет вам правильно читать и понимать китайский язык с самого начала.
+            </p>
+            <div class="modal-image">
+                <img src="images/learn-pinyin.png" alt="Изучите пиньинь" onerror="this.src='https://placehold.co/200x150/7B001C/white?text=📖+Study+Pinyin'">
+            </div>
+            <div class="modal-buttons">
+                <button id="studyLettersBtn" class="modal-btn primary">Изучить буквы и тоны</button>
+                <button id="alreadyKnowBtn" class="modal-btn secondary">Я уже знаю буквы</button>
+            </div>
+        </div>
+    </div>
+    <!-- Модальное окно подсказки при первом запуске -->
+<div id="firstLaunchModal" class="modal-overlay">
+    <div class="modal-container">
+        <div class="modal-icon">🍰</div>
+        <h3 class="modal-title">Добро пожаловать в cHeeSecaKe 1!</h3>
+        <p class="modal-text">
+            <strong>Как работают уроки:</strong><br>
+            • Выбирайте правильный ответ из вариантов<br>
+            • После ответа появится результат и кнопка "Далее"<br>
+            • В конце урока вы увидите статистику<br>
+            • Слова, которые нужно повторить, можно добавить в Тренировку<br>
+            • Весь прогресс сохраняется автоматически
+        </p>
+        <div class="modal-image">
+            <img src="images/logo.png" alt="cHeeSecaKe" style="width: 80px; border-radius: 20px;">
+        </div>
+        <div class="modal-buttons">
+            <button id="closeFirstLaunchBtn" class="modal-btn primary">Начать учиться!</button>
+        </div>
+    </div>
+</div>
+
+    <script>
+        const lessonsData = [
+            { id: 1, title: "Приветствие", description: "Научитесь здороваться и представляться", image: "images/hello-cake.png", page: "lesson1.html" },
+            { id: 2, title: "Числа 1-20", description: "Изучите цифры и счёт", image: "images/numbers-cake.png", page: "lesson2.html" },
+            { id: 3, title: "Семья", description: "Члены семьи и родственники", image: "images/old-cake.png", page: "lesson3.html" },
+            { id: 4, title: "Еда", description: "Продукты и блюда", image: "images/food-cake.png", page: "lesson4.html" },
+            { id: 5, title: "Цвета", description: "Названия цветов", image: "images/color-cakes.png", page: "lesson5.html" },
+            { id: 6, title: "Животные", description: "Домашние и дикие животные", image: "images/cake-cat.png", page: "lesson6.html" },
+            { id: 7, title: "Время", description: "Часы, дни, месяцы", image: "images/logo.png", page: "lesson7.html" },
+            { id: 8, title: "Одежда", description: "Предметы одежды", image: "images/logo.png", page: "lesson8.html" },
+            { id: 9, title: "Транспорт", description: "Виды транспорта", image: "images/logo.png", page: "lesson9.html" },
+            { id: 10, title: "Профессии", description: "Названия профессий", image: "images/logo.png", page: "lesson10.html" },
+            { id: 11, title: "Погода", description: "Описание погоды", image: "images/logo.png", page: "lesson11.html" },
+            { id: 12, title: "Дом", description: "Комнаты и мебель", image: "images/logo.png", page: "lesson12.html" },
+            { id: 13, title: "Глаголы действия", description: "Основные глаголы", image: "images/logo.png", page: "lesson13.html" },
+            { id: 14, title: "Прилагательные", description: "Описания и качества", image: "images/logo.png", page: "lesson14.html" },
+            { id: 15, title: "Вопросы", description: "Вопросительные слова", image: "images/logo.png", page: "lesson15.html" },
+            { id: 16, title: "Направления", description: "Где, куда, откуда", image: "images/logo.png", page: "lesson16.html" },
+            { id: 17, title: "Хобби", description: "Увлечения и интересы", image: "images/logo.png", page: "lesson17.html" },
+            { id: 18, title: "Магазины", description: "Покупки и цены", image: "images/logo.png", page: "lesson18.html" },
+            { id: 19, title: "Тело человека", description: "Части тела", image: "images/logo.png", page: "lesson19.html" },
+            { id: 20, title: "Путешествия", description: "Поездки и отпуск", image: "images/logo.png", page: "lesson20.html" },
+            { id: 21, title: "Здоровье", description: "Болезни и визит к врачу", image: "images/logo.png", page: "lesson21.html" },
+            { id: 22, title: "Образование", description: "Школа и учёба", image: "images/logo.png", page: "lesson22.html" },
+            { id: 23, title: "Работа", description: "Офис и карьера", image: "images/logo.png", page: "lesson23.html" },
+            { id: 24, title: "Компьютер", description: "Техника и интернет", image: "images/logo.png", page: "lesson24.html" },
+            { id: 25, title: "Спорт", description: "Виды спорта", image: "images/logo.png", page: "lesson25.html" },
+            { id: 26, title: "География", description: "Страны и города", image: "images/logo.png", page: "lesson26.html" },
+            { id: 27, title: "Искусство", description: "Музыка и живопись", image: "images/logo.png", page: "lesson27.html" },
+            { id: 28, title: "Природа", description: "Животные и растения", image: "images/logo.png", page: "lesson28.html" },
+            { id: 29, title: "Традиции", description: "Праздники и обычаи", image: "images/logo.png", page: "lesson29.html" },
+            { id: 30, title: "Повторение", description: "Подготовка к HSK 1", image: "images/logo.png", page: "lesson30.html" }
+        ];
+
+        function getCurrentUser() {
+            const user = localStorage.getItem('cheesecake_current_user');
+            return user ? JSON.parse(user) : null;
+        }
+
+        function getUsers() {
+            const users = localStorage.getItem('cheesecake_users');
+            return users ? JSON.parse(users) : [];
+        }
+
+        function saveUsers(users) {
+            localStorage.setItem('cheesecake_users', JSON.stringify(users));
+        }
+
+        function isLessonCompleted(lessonId) {
+            const user = getCurrentUser();
+            return user?.completedLessons?.includes(lessonId) || false;
+        }
+
+        function isLessonUnlocked(lessonId) {
+            if (lessonId === 1) return true;
+            return isLessonCompleted(lessonId - 1);
+        }
+
+        function hasSeenFirstLessonWarning() {
+            const user = getCurrentUser();
+            return user?.hasSeenWarning || false;
+        }
+
+        function setHasSeenWarning() {
+            const user = getCurrentUser();
+            if (!user) return;
+            const users = getUsers();
+            const userIndex = users.findIndex(u => u.id === user.id);
+            if (userIndex !== -1) {
+                users[userIndex].hasSeenWarning = true;
+                saveUsers(users);
+                const { password: _, ...updatedUser } = users[userIndex];
+                localStorage.setItem('cheesecake_current_user', JSON.stringify(updatedUser));
+            }
+        }
+
+        function showFirstLessonWarning(callback) {
+            const modal = document.getElementById('firstLessonModal');
+            if (!modal) {
+                if (callback) callback();
+                return;
+            }
+            modal.classList.add('active');
+            
+            const studyBtn = document.getElementById('studyLettersBtn');
+            const newStudyBtn = studyBtn.cloneNode(true);
+            studyBtn.parentNode.replaceChild(newStudyBtn, studyBtn);
+            newStudyBtn.addEventListener('click', () => {
+                modal.classList.remove('active');
+                window.location.href = 'letters.html';
+            });
+            
+            const knowBtn = document.getElementById('alreadyKnowBtn');
+            const newKnowBtn = knowBtn.cloneNode(true);
+            knowBtn.parentNode.replaceChild(newKnowBtn, knowBtn);
+            newKnowBtn.addEventListener('click', () => {
+                modal.classList.remove('active');
+                setHasSeenWarning();
+                if (callback) callback();
+            });
+        }
+
+        function startLesson(lessonId, page) {
+            if (lessonId === 1 && !hasSeenFirstLessonWarning()) {
+                showFirstLessonWarning(() => {
+                    window.location.href = page;
+                });
+            } else {
+                window.location.href = page;
+            }
+        }
+
+        function renderLessons() {
+            const grid = document.getElementById('lessonsGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            
+            for (let i = 0; i < lessonsData.length; i++) {
+                const lesson = lessonsData[i];
+                const completed = isLessonCompleted(lesson.id);
+                const unlocked = isLessonUnlocked(lesson.id);
+                const isLocked = !unlocked && !completed;
+                
+                const lessonCard = document.createElement('div');
+                lessonCard.className = `lesson-grid-card ${isLocked ? 'locked' : ''} ${completed ? 'completed' : ''}`;
+                lessonCard.setAttribute('data-lesson-id', lesson.id);
+                
+                lessonCard.innerHTML = `
+                    <div class="lesson-grid-image"><img src="${lesson.image}" alt="${lesson.title}" onerror="this.src='images/logo.png'"></div>
+                    <div class="lesson-grid-number">Урок ${lesson.id}</div>
+                    <div class="lesson-grid-title">${lesson.title}</div>
+                    <div class="lesson-grid-description">${lesson.description}</div>
+                    <div class="lesson-card-buttons">
+                        ${!isLocked && !completed ? `<button class="lesson-grid-btn start-btn" data-id="${lesson.id}" data-page="${lesson.page}">Начать урок</button>` : ''}
+                        ${completed ? `
+                            <button class="lesson-grid-btn reset-btn" data-page="${lesson.page}">
+                                <i class="fas fa-undo-alt"></i> Пройти заново
+                            </button>
+                        ` : ''}
+                    </div>
+                    ${completed ? '<div class="lesson-grid-completed"><i class="fas fa-check-circle"></i> Пройден</div>' : ''}
+                    ${isLocked ? '<div class="lesson-grid-locked"><i class="fas fa-lock"></i> Заблокировано</div>' : ''}
+                `;
+                grid.appendChild(lessonCard);
+            }
+            
+            document.querySelectorAll('.start-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const lessonId = parseInt(btn.dataset.id);
+                    const page = btn.dataset.page;
+                    startLesson(lessonId, page);
+                });
+            });
+            
+            document.querySelectorAll('.reset-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const page = btn.dataset.page;
+                    window.location.href = page;
+                });
+            });
+        }
+// Показываем подсказку при первом запуске
+function showFirstLaunchHint() {
+    const hasSeenHint = localStorage.getItem('cheesecake_has_seen_hint');
+    if (hasSeenHint) return;
+    
+    const modal = document.getElementById('firstLaunchModal');
+    if (!modal) return;
+    
+    modal.classList.add('active');
+    
+    const closeBtn = document.getElementById('closeFirstLaunchBtn');
+    if (closeBtn) {
+        closeBtn.onclick = () => {
+            modal.classList.remove('active');
+            localStorage.setItem('cheesecake_has_seen_hint', 'true');
+        };
+    }
+}
+        document.addEventListener('DOMContentLoaded', () => {
+    const user = getCurrentUser();
+    if (!user) {
+        window.location.href = 'auth.html';
+        return;
+    }
+    renderLessons();
+    
+    // Показываем подсказку при первом запуске
+    showFirstLaunchHint();
+});
+    </script>
+
+    <style>
+        .lessons-content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .lessons-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .lessons-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        .lessons-header p {
+            color: #6c6c6c;
+        }
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .lesson-grid-card {
+            background: white;
+            border-radius: 24px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid #eaeaea;
+            position: relative;
+        }
+        .lesson-grid-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .lesson-grid-card.locked {
+            opacity: 0.6;
+            background: #f9f9f9;
+        }
+        .lesson-grid-card.completed {
+            border-left: 4px solid #4CAF50;
+            background: #f9fff9;
+        }
+        .lesson-grid-image {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .lesson-grid-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .lesson-grid-number {
+            font-size: 0.7rem;
+            color: #7B001C;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        .lesson-grid-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .lesson-grid-description {
+            font-size: 0.8rem;
+            color: #6c6c6c;
+            margin-bottom: 1rem;
+        }
+        .lesson-card-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .lesson-grid-btn {
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .start-btn {
+            background: #7B001C;
+            color: white;
+        }
+        .start-btn:hover {
+            background: #480607;
+            transform: translateY(-2px);
+        }
+        .reset-btn {
+            background: white;
+            border: 1px solid #7B001C;
+            color: #7B001C;
+        }
+        .reset-btn:hover {
+            background: #FFF0F2;
+            transform: translateY(-2px);
+        }
+        .lesson-grid-completed {
+            color: #4CAF50;
+            font-size: 0.7rem;
+            margin-top: 0.5rem;
+        }
+        .lesson-grid-locked {
+            color: #999;
+            font-size: 0.7rem;
+            margin-top: 0.5rem;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .modal-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .modal-container {
+            background: white;
+            border-radius: 32px;
+            max-width: 450px;
+            width: 90%;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.active .modal-container {
+            transform: scale(1);
+        }
+        .modal-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .modal-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #7B001C;
+            margin-bottom: 0.75rem;
+        }
+        .modal-text {
+            color: #4a4a4a;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+        .modal-image {
+            margin: 1rem 0;
+        }
+        .modal-image img {
+            max-width: 100%;
+            border-radius: 16px;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .modal-btn {
+            flex: 1;
+            padding: 0.85rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 0.9rem;
+        }
+        .modal-btn.primary {
+            background: #7B001C;
+            color: white;
+        }
+        .modal-btn.primary:hover {
+            background: #480607;
+        }
+        .modal-btn.secondary {
+            background: white;
+            border: 1px solid #7B001C;
+            color: #7B001C;
+        }
+        .modal-btn.secondary:hover {
+            background: #FFF0F2;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; transform: translateX(-50%) scale(1); }
+            70% { opacity: 1; }
+            100% { opacity: 0; transform: translateX(-50%) scale(0.9); visibility: hidden; }
+        }
+        @media (max-width: 600px) {
+            .lessons-content {
+                padding: 1rem;
+            }
+            .lessons-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <script>
+    // Регистрация Service Worker для офлайн-работы
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+                console.log('Service Worker зарегистрирован:', registration);
+            })
+            .catch((error) => {
+                console.log('Ошибка регистрации Service Worker:', error);
+            });
+    }
+</script>
+</body>
+</html>

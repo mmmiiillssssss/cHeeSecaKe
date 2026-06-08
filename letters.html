@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="cHeeSecaKe">
+    <link rel="apple-touch-icon" href="images/logo-192.png">
+    <title>Буквы и тоны — cHeeSecaKe 1</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#7B001C">
+    <link rel="icon" href="images/logo.png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* Дополнительные стили для страницы букв и тонов */
+        .letters-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Введение с чизкейком */
+        .letters-intro {
+            background: linear-gradient(135deg, #FFF5F5 0%, #FFE8E8 100%);
+            border-radius: 32px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .intro-text {
+            flex: 2;
+        }
+        .intro-text h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: #7B001C;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .intro-text p {
+            color: #4a4a4a;
+            line-height: 1.6;
+        }
+        .intro-image {
+            flex: 1;
+            text-align: center;
+        }
+        .intro-image img {
+            max-width: 120px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Общие стили для секций */
+        .section-card {
+            background: white;
+            border-radius: 32px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border: 1px solid #eaeaea;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #7B001C;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-desc {
+            color: #6c6c6c;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Тоны - 5 карточек с эмодзи */
+        .tones-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .tone-card {
+            background: linear-gradient(135deg, #fff 0%, #f8f8f8 100%);
+            border-radius: 24px;
+            padding: 1.2rem;
+            text-align: center;
+            transition: all 0.2s;
+            border: 1px solid #eaeaea;
+        }
+        .tone-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        .tone-emoji {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .tone-symbol {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #7B001C;
+        }
+        .tone-name {
+            font-weight: 700;
+            margin: 0.5rem 0 0.25rem;
+        }
+        .tone-pitch {
+            font-size: 0.7rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+        }
+        .tone-example {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0.5rem 0;
+        }
+        .tone-example small {
+            font-size: 0.7rem;
+            font-weight: normal;
+            color: #888;
+        }
+        .tone-audio-btn {
+            background: #7B001C;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+        .tone-audio-btn:hover {
+            background: #480607;
+            transform: scale(1.05);
+        }
+
+        /* Звуковые сетки (инициали/финали) */
+        .sound-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        .sound-card {
+            background: #f8f8f8;
+            border-radius: 20px;
+            padding: 0.75rem 0.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #eee;
+        }
+        .sound-card:hover {
+            background: #FFF0F2;
+            border-color: #7B001C;
+            transform: translateY(-2px);
+        }
+        .sound-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        .sound-desc {
+            font-size: 0.6rem;
+            color: #999;
+            margin-top: 0.25rem;
+        }
+
+        /* Кнопка тренировки */
+        .train-btn {
+            background: #7B001C;
+            color: white;
+            border: none;
+            padding: 0.85rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            max-width: 250px;
+            display: block;
+            margin: 0 auto;
+            font-size: 1rem;
+        }
+        .train-btn:hover {
+            background: #480607;
+            transform: translateY(-2px);
+        }
+
+        /* Модальное окно для тренировки */
+        .quiz-modal {
+            max-width: 500px;
+        }
+        .quiz-content {
+            text-align: center;
+            padding: 1rem;
+        }
+        .quiz-question {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+        .quiz-audio-btn {
+            background: #7B001C;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 40px;
+            cursor: pointer;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .quiz-option {
+            background: #f0f0f0;
+            border: 1px solid #e0e0e0;
+            border-radius: 40px;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            background: #FFF0F2;
+            border-color: #7B001C;
+        }
+        .quiz-option.selected {
+            background: #7B001C;
+            color: white;
+            border-color: #7B001C;
+        }
+        .quiz-feedback {
+            text-align: center;
+            margin: 1rem 0;
+            font-weight: 500;
+        }
+        .quiz-feedback.correct {
+            color: #4CAF50;
+        }
+        .quiz-feedback.wrong {
+            color: #7B001C;
+        }
+
+        @media (max-width: 768px) {
+            .letters-container {
+                padding: 1rem;
+            }
+            .letters-intro {
+                flex-direction: column;
+                text-align: center;
+            }
+            .sound-grid {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            }
+            .sound-text {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Мобильная шапка (видна только на телефонах) -->
+    <div class="mobile-header">
+        <div class="mobile-header-logo">
+            <img src="images/logo.png" alt="cHeeSecaKe" onerror="this.src='https://placehold.co/32x32/7B001C/white?text=CS'">
+            <span>cHeeSecaKe <span class="one">1</span></span>
+        </div>
+    </div>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="images/logo.png" alt="cHeeSecaKe" class="sidebar-logo-img">
+                <span class="sidebar-title">cHeeSecaKe <span class="one">1</span></span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="lessons.html" class="sidebar-item">
+                    <span class="sidebar-icon">📚</span> Уроки
+                </a>
+                <a href="profile.html" class="sidebar-item">
+                    <span class="sidebar-icon">👤</span> Профиль
+                </a>
+                <a href="training.html" class="sidebar-item">
+                    <span class="sidebar-icon">🏋️</span> Тренировка
+                </a>
+                <a href="letters.html" class="sidebar-item active">
+                    <span class="sidebar-icon">🔤</span> Буквы и тоны
+                </a>
+                <a href="about.html" class="sidebar-item">
+                    <span class="sidebar-icon">🍰</span> О нас
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content-with-sidebar">
+            <div class="letters-container">
+                <!-- Введение с картинкой -->
+                <div class="letters-intro">
+                    <div class="intro-text">
+                        <h1><span>🔤</span> Пиньинь и произношение</h1>
+                        <p>Пиньинь — это система записи китайских иероглифов латинскими буквами. Она помогает правильно читать и произносить слова. Китайский язык — тональный, поэтому важно научиться различать 4 тона и нейтральный тон.</p>
+                    </div>
+                    <div class="intro-image">
+                        <img src="images/learn-pinyin.png" alt="cHeeSecaKe" onerror="this.src='https://placehold.co/120x120/7B001C/white?text=🍰'">
+                    </div>
+                </div>
+
+                <!-- БЛОК ТОНОВ с эмодзи -->
+                <div class="section-card">
+                    <h2 class="section-title"><span>🎵</span> Тоны (声调)</h2>
+                    <p class="section-desc">В китайском языке значение слова меняется в зависимости от тона. Один и тот же слог "ma" может означать "мама", "конопля", "лошадь" или "ругать".</p>
+                    
+                    <div class="tones-grid">
+                        <div class="tone-card" data-tone="1">
+                            <div class="tone-emoji">👩‍🍼</div>
+                            <div class="tone-symbol">¯</div>
+                            <div class="tone-name">Первый тон</div>
+                            <div class="tone-pitch">Высокий ровный (5—5)</div>
+                            <div class="tone-example">mā<br><small>мама</small></div>
+                            <button class="tone-audio-btn" data-sound="ma1">🔊</button>
+                        </div>
+                        <div class="tone-card" data-tone="2">
+                            <div class="tone-emoji">🌿</div>
+                            <div class="tone-symbol">ˊ</div>
+                            <div class="tone-name">Второй тон</div>
+                            <div class="tone-pitch">Восходящий (3—5)</div>
+                            <div class="tone-example">má<br><small>конопля</small></div>
+                            <button class="tone-audio-btn" data-sound="ma2">🔊</button>
+                        </div>
+                        <div class="tone-card" data-tone="3">
+                            <div class="tone-emoji">🐎</div>
+                            <div class="tone-symbol">ˇ</div>
+                            <div class="tone-name">Третий тон</div>
+                            <div class="tone-pitch">Нисходяще-восходящий (2—1—4)</div>
+                            <div class="tone-example">mǎ<br><small>лошадь</small></div>
+                            <button class="tone-audio-btn" data-sound="ma3">🔊</button>
+                        </div>
+                        <div class="tone-card" data-tone="4">
+                            <div class="tone-emoji">🤬</div>
+                            <div class="tone-symbol">ˋ</div>
+                            <div class="tone-name">Четвёртый тон</div>
+                            <div class="tone-pitch">Резкий нисходящий (5—1)</div>
+                            <div class="tone-example">mà<br><small>ругать</small></div>
+                            <button class="tone-audio-btn" data-sound="ma4">🔊</button>
+                        </div>
+                        <div class="tone-card" data-tone="5">
+                            <div class="tone-emoji">⚪</div>
+                            <div class="tone-symbol">·</div>
+                            <div class="tone-name">Нейтральный тон</div>
+                            <div class="tone-pitch">Лёгкий, короткий</div>
+                            <div class="tone-example">ma<br><small>вопросительная частица</small></div>
+                            <button class="tone-audio-btn" data-sound="ma0">🔊</button>
+                        </div>
+                    </div>
+                    
+                    <button class="train-btn" id="trainTonesBtn">
+                        🎮 Начать тренировку тонов
+                    </button>
+                </div>
+
+                <!-- БЛОК ИНИЦИАЛЕЙ -->
+                <div class="section-card">
+                    <h2 class="section-title"><span>🎤</span> Инициали (声母)</h2>
+                    <p class="section-desc">Инициали — это начальные согласные звуки слога. Всего их 21. Нажмите на любой звук, чтобы прослушать.</p>
+                    <div class="sound-grid" id="initialsGrid"></div>
+                </div>
+
+                <!-- БЛОК ФИНАЛЕЙ -->
+                <div class="section-card">
+                    <h2 class="section-title"><span>🌊</span> Финали (韵母)</h2>
+                    <p class="section-desc">Финали — это конечные звуки слога, могут быть гласными или сочетаниями с носовым окончанием.</p>
+                    <div class="sound-grid" id="finalsGrid"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Модальное окно для тренировки тонов -->
+    <div id="tonesQuizModal" class="modal-overlay">
+        <div class="modal-container quiz-modal">
+            <div class="modal-icon">🎧</div>
+            <h3 class="modal-title">Тренировка тонов</h3>
+            <div class="quiz-content" id="quizContent"></div>
+            <div class="quiz-feedback" id="quizFeedback"></div>
+            <div class="quiz-buttons" style="display: flex; gap: 1rem; justify-content: center;">
+                <button id="quizNextBtn" class="modal-btn primary" style="display: none;">Следующий вопрос</button>
+                <button id="quizCloseBtn" class="modal-btn secondary">Закрыть</button>
+            </div>
+        </div>
+    </div>
+<!-- Модальное окно результатов тренировки тонов -->
+<div id="quizResultModal" class="modal-overlay">
+    <div class="modal-container" style="max-width: 380px;">
+        <div class="modal-icon" id="resultIcon">🏆</div>
+        <h3 class="modal-title" id="resultTitle">Тренировка завершена!</h3>
+        <div class="result-stats" id="resultStats" style="margin: 1rem 0; padding: 0.5rem;">
+            <!-- Сюда вставим статистику -->
+        </div>
+        <div class="modal-buttons">
+            <button id="closeResultModal" class="modal-btn primary">Отлично!</button>
+        </div>
+    </div>
+</div>
+    <script>
+        // Функции звуков (без автоматического воспроизведения)
+        function playAudioFile(filePath) {
+            if (!filePath) return;
+            const audio = new Audio(filePath);
+            audio.play().catch(e => console.log('Audio error:', e));
+        }
+
+        // Данные для инициалей
+        const initials = [
+            'b', 'p', 'm', 'f', 'd', 't', 'n', 'l',
+            'g', 'k', 'h', 'j', 'q', 'x',
+            'z', 'c', 's', 'zh', 'ch', 'sh', 'r'
+        ];
+
+        // Данные для финалей
+        const finals = [
+            'a', 'o', 'e', 'i', 'u', 'ü',
+            'ai', 'ei', 'ao', 'ou', 'an', 'ang',
+            'en', 'eng', 'ong', 'ia', 'ie', 'iao',
+            'iu', 'ian', 'in', 'iang', 'ing', 'iong',
+            'ua', 'uo', 'uai', 'ui', 'uan', 'un',
+            'uang', 'ueng', 'üe', 'üan', 'ün', 'er'
+        ];
+
+        // Рендер инициалей
+        const initialsGrid = document.getElementById('initialsGrid');
+        if (initialsGrid) {
+            initials.forEach(init => {
+                const card = document.createElement('div');
+                card.className = 'sound-card';
+                card.innerHTML = `
+                    <div class="sound-text">${init}</div>
+                    <div class="sound-desc">согласный</div>
+                `;
+                card.addEventListener('click', () => playAudioFile(`audio/${init}.mp3`));
+                initialsGrid.appendChild(card);
+            });
+        }
+
+        // Рендер финалей
+        const finalsGrid = document.getElementById('finalsGrid');
+        if (finalsGrid) {
+            finals.forEach(final => {
+                const card = document.createElement('div');
+                card.className = 'sound-card';
+                card.innerHTML = `
+                    <div class="sound-text">${final}</div>
+                    <div class="sound-desc">гласный</div>
+                `;
+                card.addEventListener('click', () => playAudioFile(`audio/${final}.mp3`));
+                finalsGrid.appendChild(card);
+            });
+        }
+
+        // Тоны - ручное воспроизведение (без авто)
+        document.querySelectorAll('.tone-audio-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const sound = btn.dataset.sound;
+                if (sound) playAudioFile(`audio/${sound}.mp3`);
+            });
+        });
+
+        // ========== ТРЕНИРОВКА ТОНОВ (РАНДОМНЫЙ ПОРЯДОК) ==========
+        const trainBtn = document.getElementById('trainTonesBtn');
+        const quizModal = document.getElementById('tonesQuizModal');
+        const quizContent = document.getElementById('quizContent');
+        const quizFeedback = document.getElementById('quizFeedback');
+        const quizNextBtn = document.getElementById('quizNextBtn');
+        const quizCloseBtn = document.getElementById('quizCloseBtn');
+
+        // Базовый массив вопросов
+        const baseQuestions = [
+            { sound: 'ma1', correct: 1, text: 'Какой это тон?', options: ['1-й тон (ровный)', '2-й тон (восходящий)', '3-й тон (нисх.-восх.)', '4-й тон (резкий)'] },
+            { sound: 'ma2', correct: 2, text: 'Какой это тон?', options: ['1-й тон (ровный)', '2-й тон (восходящий)', '3-й тон (нисх.-восх.)', '4-й тон (резкий)'] },
+            { sound: 'ma3', correct: 3, text: 'Какой это тон?', options: ['1-й тон (ровный)', '2-й тон (восходящий)', '3-й тон (нисх.-восх.)', '4-й тон (резкий)'] },
+            { sound: 'ma4', correct: 4, text: 'Какой это тон?', options: ['1-й тон (ровный)', '2-й тон (восходящий)', '3-й тон (нисх.-восх.)', '4-й тон (резкий)'] },
+            { sound: 'ma0', correct: 0, text: 'Какой это тон?', options: ['1-й тон (ровный)', '2-й тон (восходящий)', '3-й тон (нисх.-восх.)', '4-й тон (резкий)', 'Нейтральный тон'], correctIsNeutral: true }
+        ];
+
+        let questions = [];     // Перемешанный массив
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        // Функция перемешивания массива (рандом)
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // Функция проверки правильности для нейтрального тона
+        function isAnswerCorrect(selected, q) {
+            if (q.correctIsNeutral) {
+                return selected === 5; // 5-й вариант — нейтральный тон
+            }
+            return selected === q.correct;
+        }
+
+        function getCorrectAnswerText(q) {
+            if (q.correctIsNeutral) {
+                return 'Нейтральный тон';
+            }
+            return q.options[q.correct - 1];
+        }
+
+        function loadQuestion() {
+            const q = questions[currentQuestionIndex];
+            if (!q) return;
+            
+            quizContent.innerHTML = `
+                <div class="quiz-question">${q.text}</div>
+                <button class="quiz-audio-btn" id="playQuizAudio">🔊 Прослушать звук</button>
+                <div class="quiz-options" id="quizOptions">
+                    ${q.options.map((opt, idx) => `
+                        <div class="quiz-option" data-opt="${idx + 1}">${opt}</div>
+                    `).join('')}
+                </div>
+            `;
+            
+            const playBtn = document.getElementById('playQuizAudio');
+            // Убираем старые обработчики, чтобы не накапливались
+            const newPlayBtn = playBtn.cloneNode(true);
+            playBtn.parentNode.replaceChild(newPlayBtn, playBtn);
+            newPlayBtn.addEventListener('click', () => {
+                playAudioFile(`audio/${q.sound}.mp3`);
+            });
+            
+            // Обработчики для вариантов ответа
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                const newOpt = opt.cloneNode(true);
+                opt.parentNode.replaceChild(newOpt, opt);
+                
+                newOpt.addEventListener('click', () => {
+                    const selected = parseInt(newOpt.dataset.opt);
+                    const isCorrect = isAnswerCorrect(selected, q);
+                    
+                    if (isCorrect) {
+                        score++;
+                        quizFeedback.innerHTML = '✅ Правильно! Молодец!';
+                        quizFeedback.className = 'quiz-feedback correct';
+                    } else {
+                        quizFeedback.innerHTML = `❌ Неправильно. Правильный ответ: ${getCorrectAnswerText(q)}`;
+                        quizFeedback.className = 'quiz-feedback wrong';
+                    }
+                    
+                    // Блокируем повторный выбор
+                    document.querySelectorAll('.quiz-option').forEach(o => {
+                        o.style.pointerEvents = 'none';
+                        o.style.opacity = '0.6';
+                    });
+                    
+                    // Показываем кнопку "Следующий вопрос" или "Завершить"
+                    if (currentQuestionIndex + 1 < questions.length) {
+                        quizNextBtn.textContent = 'Следующий вопрос →';
+                        quizNextBtn.style.display = 'block';
+                    } else {
+                        quizNextBtn.textContent = '🏆 Завершить';
+                        quizNextBtn.style.display = 'block';
+                    }
+                });
+            });
+        }
+
+        function startQuiz() {
+            // Перемешиваем вопросы
+            questions = shuffleArray([...baseQuestions]);
+            currentQuestionIndex = 0;
+            score = 0;
+            quizFeedback.innerHTML = '';
+            quizNextBtn.style.display = 'none';
+            quizModal.classList.add('active');
+            loadQuestion();
+        }
+
+function showQuizResult() {
+    const percent = Math.round((score / questions.length) * 100);
+    let emoji = '';
+    let message = '';
+    
+    if (percent === 100) {
+        emoji = '🏆🌟';
+        message = 'Идеально! Ты мастер тонов!';
+    } else if (percent >= 80) {
+        emoji = '🎉✨';
+        message = 'Отличный результат! Так держать!';
+    } else if (percent >= 60) {
+        emoji = '👍📈';
+        message = 'Хорошо! Ещё немного практики — и будет идеально.';
+    } else if (percent >= 40) {
+        emoji = '💪📖';
+        message = 'Неплохо! Повтори тоны и попробуй ещё раз.';
+    } else {
+        emoji = '🎧🔁';
+        message = 'Тренируй тоны ещё — у тебя всё получится!';
+    }
+    
+    const resultModal = document.getElementById('quizResultModal');
+    const resultStats = document.getElementById('resultStats');
+    
+    resultStats.innerHTML = `
+        <div style="text-align: center;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">${emoji}</div>
+            <p style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">${message}</p>
+            <div style="background: #f8f8f8; border-radius: 20px; padding: 0.75rem; margin-top: 0.5rem;">
+                <p style="font-size: 1.2rem;"><strong>${score}</strong> из <strong>${questions.length}</strong> правильных</p>
+                <div style="background: #e0e0e0; border-radius: 10px; height: 8px; width: 100%; margin-top: 0.5rem; overflow: hidden;">
+                    <div style="background: #7B001C; border-radius: 10px; height: 100%; width: ${percent}%;"></div>
+                </div>
+                <p style="font-size: 0.8rem; color: #6c6c6c; margin-top: 0.5rem;">Процент правильности: ${percent}%</p>
+            </div>
+        </div>
+    `;
+    
+    resultModal.classList.add('active');
+}
+
+function nextQuestion() {
+    if (currentQuestionIndex + 1 < questions.length) {
+        currentQuestionIndex++;
+        quizFeedback.innerHTML = '';
+        quizNextBtn.style.display = 'none';
+        loadQuestion();
+    } else {
+        // Закрываем модалку тренировки
+        quizModal.classList.remove('active');
+        // Показываем красивое окно с результатами
+        showQuizResult();
+        // Сбрасываем для следующего запуска
+        questions = [];
+        currentQuestionIndex = 0;
+        score = 0;
+    }
+}
+
+// Закрытие модального окна результатов
+const closeResultBtn = document.getElementById('closeResultModal');
+if (closeResultBtn) {
+    closeResultBtn.addEventListener('click', () => {
+        const resultModal = document.getElementById('quizResultModal');
+        if (resultModal) resultModal.classList.remove('active');
+    });
+}
+
+// Клик по overlay для закрытия
+const resultModal = document.getElementById('quizResultModal');
+if (resultModal) {
+    resultModal.addEventListener('click', (e) => {
+        if (e.target === resultModal) resultModal.classList.remove('active');
+    });
+}
+        // События
+        if (trainBtn) {
+            trainBtn.addEventListener('click', startQuiz);
+        }
+        
+        if (quizNextBtn) {
+            quizNextBtn.addEventListener('click', nextQuestion);
+        }
+        
+        if (quizCloseBtn) {
+            quizCloseBtn.addEventListener('click', () => {
+                quizModal.classList.remove('active');
+            });
+        }
+        
+        if (quizModal) {
+            quizModal.addEventListener('click', (e) => {
+                if (e.target === quizModal) quizModal.classList.remove('active');
+            });
+        }
+    </script>
+    <script>
+    // Регистрация Service Worker для офлайн-работы
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+                console.log('Service Worker зарегистрирован:', registration);
+            })
+            .catch((error) => {
+                console.log('Ошибка регистрации Service Worker:', error);
+            });
+    }
+    </script>
+</body>
+</html>

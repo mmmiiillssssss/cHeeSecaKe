@@ -1,0 +1,21 @@
+{
+    "name": "cHeeSecaKe 1 — Изучай китайский",
+    "short_name": "cHeeSecaKe",
+    "description": "30 уроков китайского языка за месяц до HSK 1",
+    "start_url": "/",
+    "display": "standalone",
+    "theme_color": "#7B001C",
+    "background_color": "#ffffff",
+    "icons": [
+        {
+            "src": "/images/logo.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/images/logo.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

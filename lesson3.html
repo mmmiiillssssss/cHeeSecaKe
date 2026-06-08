@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="cHeeSecaKe">
+<link rel="apple-touch-icon" href="images/logo-192.png">
+    <title>Урок 3 — Семья | cHeeSecaKe 1</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#7B001C">
+    <link rel="icon" href="images/logo.png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .exit-lesson-btn {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #6c6c6c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        .exit-lesson-btn:hover {
+            background: #555;
+            transform: scale(1.05);
+        }
+        .exit-lesson-btn i {
+            font-size: 1.4rem;
+        }
+        .add-to-review-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #ff9800;
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            font-size: 1.4rem;
+        }
+        .add-to-review-btn:hover {
+            background: #e68900;
+            transform: scale(1.05);
+        }
+        .reset-lesson-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #7B001C;
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        .reset-lesson-btn:hover {
+            background: #480607;
+            transform: scale(1.05);
+        }
+        .reset-lesson-btn i {
+            font-size: 1.4rem;
+        }
+        .words-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+        .word-card {
+            background: #f8f8f8;
+            border: 1px solid #eaeaea;
+            border-radius: 40px;
+            padding: 0.5rem 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+        .word-card:hover {
+            background: #FFF0F2;
+            border-color: #7B001C;
+        }
+        .word-card .word-text {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        .word-card .word-pinyin {
+            font-size: 0.7rem;
+            color: #888;
+        }
+        .word-card .add-word-btn {
+            background: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .word-card .add-word-btn:hover {
+            background: #e68900;
+            transform: scale(1.1);
+        }
+        .word-card.added {
+            background: #e8f5e9;
+            border-color: #4CAF50;
+        }
+        .word-card.added .add-word-btn {
+            background: #4CAF50;
+            pointer-events: none;
+        }
+        .lesson-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .exercise-card {
+            background: white;
+            border-radius: 32px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid #eaeaea;
+        }
+        .exercise-title {
+            font-size: 1.2rem;
+            color: #7B001C;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .word-display {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .chinese-char {
+            font-size: 3.5rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+        }
+        .pinyin-display {
+            font-size: 1.2rem;
+            color: #7B001C;
+            margin-bottom: 0.5rem;
+        }
+        .audio-btn {
+            background: #7B001C;
+            color: white;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            margin: 1rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .audio-btn:hover {
+            background: #480607;
+            transform: scale(1.05);
+        }
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .option-card {
+            background: white;
+            border: 2px solid #eaeaea;
+            border-radius: 20px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .option-card:hover {
+            border-color: #7B001C;
+            transform: translateY(-2px);
+        }
+        .option-card.selected {
+            border-color: #7B001C;
+            background: #FFF0F2;
+        }
+        .option-emoji {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        .option-label {
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+        .sentence-container {
+            text-align: center;
+            margin: 2rem 0;
+        }
+        .sentence-text {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .highlight-char {
+            color: #7B001C;
+            font-weight: bold;
+            font-size: 1.8rem;
+        }
+        .blanks-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .blank-input {
+            width: 120px;
+            padding: 0.75rem;
+            font-size: 1rem;
+            border: 2px solid #eaeaea;
+            border-radius: 12px;
+            text-align: center;
+            outline: none;
+            background: white;
+        }
+        .blank-input:focus {
+            border-color: #7B001C;
+        }
+        .suffix-text {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #1a1a1a;
+        }
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+        .word-bank-item {
+            background: #f0f0f0;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .word-bank-item:hover {
+            background: #7B001C;
+            color: white;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+        .check-btn {
+            background: #7B001C;
+            color: white;
+            border: none;
+            padding: 0.85rem 2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .check-btn:hover {
+            background: #480607;
+            transform: translateY(-2px);
+        }
+        .next-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.85rem 2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tryagain-btn {
+            background: #7B001C;
+            color: white;
+            border: none;
+            padding: 0.85rem 2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .result-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .result-card {
+            background: white;
+            border-radius: 32px;
+            padding: 2rem;
+            text-align: center;
+            max-width: 350px;
+            width: 90%;
+        }
+        .result-card.correct {
+            border: 3px solid #4CAF50;
+        }
+        .result-card.wrong {
+            border: 3px solid #7B001C;
+        }
+        .result-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .result-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .result-card.correct .result-title {
+            color: #4CAF50;
+        }
+        .result-card.wrong .result-title {
+            color: #7B001C;
+        }
+        .result-details {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #f8f8f8;
+            border-radius: 16px;
+        }
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 20px;
+            height: 6px;
+            margin-bottom: 1rem;
+        }
+        .progress-fill {
+            background: #7B001C;
+            border-radius: 20px;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; transform: translateX(-50%) scale(1); }
+            70% { opacity: 1; }
+            100% { opacity: 0; transform: translateX(-50%) scale(0.9); visibility: hidden; }
+        }
+        @media (max-width: 600px) {
+            .lesson-container { padding: 1rem; }
+            .options-grid { grid-template-columns: 1fr; }
+            .sentence-text { font-size: 1.1rem; }
+            .blanks-container { flex-direction: column; align-items: center; }
+            .add-to-review-btn, .exit-lesson-btn, .reset-lesson-btn {
+                bottom: 80px;
+                width: 48px;
+                height: 48px;
+            }
+            .add-to-review-btn { right: 1rem; }
+            .exit-lesson-btn { left: 1rem; }
+            .reset-lesson-btn { right: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-header">
+        <div class="mobile-header-logo">
+            <img src="images/logo.png" alt="cHeeSecaKe" onerror="this.src='https://placehold.co/32x32/7B001C/white?text=CS'">
+            <span>cHeeSecaKe <span class="one">1</span></span>
+        </div>
+    </div>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="images/logo.png" alt="cHeeSecaKe" class="sidebar-logo-img">
+                <span class="sidebar-title">cHeeSecaKe <span class="one">1</span></span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="lessons.html" class="sidebar-item">
+                    <span class="sidebar-icon">📚</span> Уроки
+                </a>
+                <a href="profile.html" class="sidebar-item">
+                    <span class="sidebar-icon">👤</span> Профиль
+                </a>
+                <a href="training.html" class="sidebar-item">
+                    <span class="sidebar-icon">🏋️</span> Тренировка
+                </a>
+                <a href="letters.html" class="sidebar-item">
+                    <span class="sidebar-icon">🔤</span> Буквы и тоны
+                </a>
+                <a href="about.html" class="sidebar-item">
+                    <span class="sidebar-icon">🍰</span> О нас
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content-with-sidebar">
+            <div class="lesson-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div id="exerciseContainer"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    
+    <script>
+        // ========== ЗВУКИ ==========
+        function playErrorSound() {
+            const audio = new Audio('audio/error.mp3');
+            audio.play().catch(e => console.log('Audio error:', e));
+        }
+        function playSuccessSound() {
+            const audio = new Audio('audio/success.mp3');
+            audio.play().catch(e => console.log('Audio error:', e));
+        }
+        function playAudio(path) {
+            const audio = new Audio(path);
+            audio.play().catch(e => console.log('Audio error:', e));
+        }
+
+        // ========== ЗАЩИТА ВЫХОДА ==========
+        let pendingExitUrl = null;
+
+        function showExitConfirmModal(targetUrl) {
+            pendingExitUrl = targetUrl;
+            const modal = document.getElementById('exitLessonModal');
+            if (modal) modal.classList.add('active');
+        }
+
+        function closeExitModal() {
+            const modal = document.getElementById('exitLessonModal');
+            if (modal) modal.classList.remove('active');
+            pendingExitUrl = null;
+        }
+
+        function setupMenuProtection() {
+            const menuLinks = document.querySelectorAll('.sidebar-item');
+            menuLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const targetUrl = link.getAttribute('href');
+                    if (targetUrl && targetUrl !== '#') {
+                        e.preventDefault();
+                        showExitConfirmModal(targetUrl);
+                    }
+                });
+            });
+        }
+
+        function addExitButton() {
+            const existingBtn = document.querySelector('.exit-lesson-btn');
+            if (existingBtn) existingBtn.remove();
+            const exitBtn = document.createElement('button');
+            exitBtn.className = 'exit-lesson-btn';
+            exitBtn.innerHTML = '<i class="fas fa-home"></i>';
+            exitBtn.onclick = () => showExitConfirmModal('lessons.html');
+            document.body.appendChild(exitBtn);
+        }
+
+        // ========== ДОБАВЛЕНИЕ СЛОВА В ТРЕНИРОВКУ ==========
+        function addWordToReview(word, pinyin = '') {
+            const user = getCurrentUser();
+            if (!user) return false;
+            
+            const users = getUsers();
+            const idx = users.findIndex(u => u.id === user.id);
+            if (idx !== -1) {
+                if (!users[idx].wordsToReview) users[idx].wordsToReview = [];
+                if (!users[idx].wordsToReview.includes(word)) {
+                    users[idx].wordsToReview.push(word);
+                    saveUsers(users);
+                    showToast(`✅ Слово "${word}" добавлено в тренировку!`, '#4CAF50');
+                    return true;
+                } else {
+                    showToast(`⚠️ Слово "${word}" уже в тренировке!`, '#ff9800');
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        function showToast(message, color) {
+            const toast = document.createElement('div');
+            toast.textContent = message;
+            toast.style.cssText = `position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: ${color}; color: white; padding: 10px 20px; border-radius: 40px; font-size: 14px; z-index: 10000; animation: fadeOut 2s forwards;`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
+        }
+
+        function addReviewButton(currentWord, currentPinyin = '') {
+            const existingBtn = document.querySelector('.add-to-review-btn');
+            if (existingBtn) existingBtn.remove();
+            
+            const reviewBtn = document.createElement('button');
+            reviewBtn.className = 'add-to-review-btn';
+            reviewBtn.innerHTML = '<i class="fas fa-bookmark"></i>';
+            reviewBtn.onclick = () => addWordToReview(currentWord, currentPinyin);
+            document.body.appendChild(reviewBtn);
+        }
+
+        // ========== ДАННЫЕ УПРАЖНЕНИЙ ==========
+        const exercises = [
+            // Выбор эмодзи
+            { type: 'image-choice', word: { chinese: '爸爸', pinyin: 'bà ba' }, audio: 'audio/baba.mp3', options: [
+                { id: 1, label: 'Папа', emoji: '👨', correct: true },
+                { id: 2, label: 'Мама', emoji: '👩', correct: false },
+                { id: 3, label: 'Брат', emoji: '👦', correct: false },
+                { id: 4, label: 'Сестра', emoji: '👧', correct: false }
+            ] },
+            { type: 'image-choice', word: { chinese: '妈妈', pinyin: 'mā ma' }, audio: 'audio/mama.mp3', options: [
+                { id: 1, label: 'Папа', emoji: '👨', correct: false },
+                { id: 2, label: 'Мама', emoji: '👩', correct: true },
+                { id: 3, label: 'Брат', emoji: '👦', correct: false },
+                { id: 4, label: 'Сестра', emoji: '👧', correct: false }
+            ] },
+            { type: 'image-choice', word: { chinese: '哥哥', pinyin: 'gē ge' }, audio: 'audio/gege.mp3', options: [
+                { id: 1, label: 'Младший брат', emoji: '👶', correct: false },
+                { id: 2, label: 'Старший брат', emoji: '👨', correct: true },
+                { id: 3, label: 'Старшая сестра', emoji: '👩', correct: false },
+                { id: 4, label: 'Младшая сестра', emoji: '👧', correct: false }
+            ] },
+            { type: 'image-choice', word: { chinese: '姐姐', pinyin: 'jiě jie' }, audio: 'audio/jiejie.mp3', options: [
+                { id: 1, label: 'Младший брат', emoji: '👶', correct: false },
+                { id: 2, label: 'Старший брат', emoji: '👨', correct: false },
+                { id: 3, label: 'Старшая сестра', emoji: '👩', correct: true },
+                { id: 4, label: 'Младшая сестра', emoji: '👧', correct: false }
+            ] },
+            { type: 'image-choice', word: { chinese: '弟弟', pinyin: 'dì di' }, audio: 'audio/didi.mp3', options: [
+                { id: 1, label: 'Младший брат', emoji: '👶', correct: true },
+                { id: 2, label: 'Старший брат', emoji: '👨', correct: false },
+                { id: 3, label: 'Старшая сестра', emoji: '👩', correct: false },
+                { id: 4, label: 'Младшая сестра', emoji: '👧', correct: false }
+            ] },
+            { type: 'image-choice', word: { chinese: '妹妹', pinyin: 'mèi mei' }, audio: 'audio/meimei.mp3', options: [
+                { id: 1, label: 'Младший брат', emoji: '👶', correct: false },
+                { id: 2, label: 'Старший брат', emoji: '👨', correct: false },
+                { id: 3, label: 'Старшая сестра', emoji: '👩', correct: false },
+                { id: 4, label: 'Младшая сестра', emoji: '👧', correct: true }
+            ] },
+            { type: 'image-choice', word: { chinese: '爷爷', pinyin: 'yé ye' }, audio: 'audio/yeye.mp3', options: [
+                { id: 1, label: 'Дедушка', emoji: '👴', correct: true },
+                { id: 2, label: 'Бабушка', emoji: '👵', correct: false },
+                { id: 3, label: 'Папа', emoji: '👨', correct: false },
+                { id: 4, label: 'Мама', emoji: '👩', correct: false }
+            ] },
+            { type: 'image-choice', word: { chinese: '奶奶', pinyin: 'nǎi nai' }, audio: 'audio/nainai.mp3', options: [
+                { id: 1, label: 'Дедушка', emoji: '👴', correct: false },
+                { id: 2, label: 'Бабушка', emoji: '👵', correct: true },
+                { id: 3, label: 'Папа', emoji: '👨', correct: false },
+                { id: 4, label: 'Мама', emoji: '👩', correct: false }
+            ] },
+
+            // Выбор иероглифа
+            { type: 'hanzi-choice', question: 'Папа', audio: 'audio/baba.mp3', options: [
+                { id: 1, text: '妈妈', pinyin: 'mā ma', correct: false, audioFile: 'mama.mp3' },
+                { id: 2, text: '爸爸', pinyin: 'bà ba', correct: true, audioFile: 'baba.mp3' },
+                { id: 3, text: '哥哥', pinyin: 'gē ge', correct: false, audioFile: 'gege.mp3' },
+                { id: 4, text: '姐姐', pinyin: 'jiě jie', correct: false, audioFile: 'jiejie.mp3' }
+            ] },
+            { type: 'hanzi-choice', question: 'Мама', audio: 'audio/mama.mp3', options: [
+                { id: 1, text: '爸爸', pinyin: 'bà ba', correct: false, audioFile: 'baba.mp3' },
+                { id: 2, text: '妈妈', pinyin: 'mā ma', correct: true, audioFile: 'mama.mp3' },
+                { id: 3, text: '弟弟', pinyin: 'dì di', correct: false, audioFile: 'didi.mp3' },
+                { id: 4, text: '妹妹', pinyin: 'mèi mei', correct: false, audioFile: 'meimei.mp3' }
+            ] },
+            { type: 'hanzi-choice', question: 'Старший брат', audio: 'audio/gege.mp3', options: [
+                { id: 1, text: '弟弟', pinyin: 'dì di', correct: false, audioFile: 'didi.mp3' },
+                { id: 2, text: '妹妹', pinyin: 'mèi mei', correct: false, audioFile: 'meimei.mp3' },
+                { id: 3, text: '哥哥', pinyin: 'gē ge', correct: true, audioFile: 'gege.mp3' },
+                { id: 4, text: '姐姐', pinyin: 'jiě jie', correct: false, audioFile: 'jiejie.mp3' }
+            ] },
+            { type: 'hanzi-choice', question: 'Дедушка', audio: 'audio/yeye.mp3', options: [
+                { id: 1, text: '奶奶', pinyin: 'nǎi nai', correct: false, audioFile: 'nainai.mp3' },
+                { id: 2, text: '爷爷', pinyin: 'yé ye', correct: true, audioFile: 'yeye.mp3' },
+                { id: 3, text: '爸爸', pinyin: 'bà ba', correct: false, audioFile: 'baba.mp3' },
+                { id: 4, text: '妈妈', pinyin: 'mā ma', correct: false, audioFile: 'mama.mp3' }
+            ] },
+            { type: 'hanzi-choice', question: 'Бабушка', audio: 'audio/nainai.mp3', options: [
+                { id: 1, text: '爷爷', pinyin: 'yé ye', correct: false, audioFile: 'yeye.mp3' },
+                { id: 2, text: '奶奶', pinyin: 'nǎi nai', correct: true, audioFile: 'nainai.mp3' },
+                { id: 3, text: '爸爸', pinyin: 'bà ba', correct: false, audioFile: 'baba.mp3' },
+                { id: 4, text: '妈妈', pinyin: 'mā ma', correct: false, audioFile: 'mama.mp3' }
+            ] },
+            { type: 'hanzi-choice', question: 'Семья', audio: 'audio/jia.mp3', options: [
+                { id: 1, text: '家', pinyin: 'jiā', correct: true, audioFile: 'jia.mp3' },
+                { id: 2, text: '有', pinyin: 'yǒu', correct: false, audioFile: 'you.mp3' },
+                { id: 3, text: '孩子', pinyin: 'hái zi', correct: false, audioFile: 'haizi.mp3' },
+                { id: 4, text: '父母', pinyin: 'fù mǔ', correct: false, audioFile: 'fumu.mp3' }
+            ] },
+
+            // Заполнение пропусков
+            { type: 'fill-blanks-number', sentence: { chinese: '我家有 ___ 口人', pinyin: 'wǒ jiā yǒu ___ kǒu rén', translation: 'В моей семье три человека' }, audio: 'audio/wojiayousankouren.mp3', blankCorrect: '三', wordBank: ['一', '二', '三', '四', '五'] },
+            { type: 'fill-blanks', sentence: { chinese: '我爱我的家人', pinyin: 'wǒ ài wǒ de jiā rén', translation: 'Я люблю свою семью' }, audio: 'audio/woaiwojiaren.mp3', highlightedChar: '爱', suffix: '', blanks: [{ correct: '我爱我的家人' }], wordBank: ['我爱我家', '我爱我的家人', '我爱父母', '我爱他们'] },
+            { type: 'dialogue-blank', sentence: { chinese: '这是我的 ___ ', pinyin: 'zhè shì wǒ de ___ ', translation: 'Это моя мама' }, audio: 'audio/zheshiwomama.mp3', blankCorrect: '妈妈', wordBank: ['妈妈', '爸爸', '妹妹', '奶奶', '姐姐'] },
+
+            // Выбор перевода
+            { type: 'translation-choice', sentence: { chinese: '我家有三口人', pinyin: 'wǒ jiā yǒu sān kǒu rén' }, audio: 'audio/wojiayousankouren.mp3', options: [
+                { id: 1, text: 'В моей семье два человека', correct: false },
+                { id: 2, text: 'В моей семье три человека', correct: true },
+                { id: 3, text: 'В моей семье четыре человека', correct: false },
+                { id: 4, text: 'В моей семье пять человек', correct: false }
+            ] },
+            { type: 'translation-choice', sentence: { chinese: '爷爷和奶奶住在北京', pinyin: 'yé ye hé nǎi nai zhù zài běi jīng' }, audio: 'audio/yeyehenainai.mp3', options: [
+                { id: 1, text: 'Тетя и дядя живут в Пекине', correct: false },
+                { id: 2, text: 'Дедушка и бабушка живут в Пекине', correct: true },
+                { id: 3, text: 'Старший брат и старшая сестра живут в Пекине', correct: false },
+                { id: 4, text: 'Младший брат и младшая сестра живут в Пекине', correct: false }
+            ] },
+            { type: 'translation-choice', sentence: { chinese: '你们家有几口人？', pinyin: 'nǐ men jiā yǒu jǐ kǒu rén?' }, audio: 'audio/nimenjiayoujikouren.mp3', options: [
+                { id: 1, text: 'Сколько человек в твоей семье?', correct: true },
+                { id: 2, text: 'Сколько лет твоей семье?', correct: false },
+                { id: 3, text: 'Где твоя семья?', correct: false },
+                { id: 4, text: 'Как твоя семья?', correct: false }
+            ] },
+            { type: 'translation-choice', sentence: { chinese: '你的女儿几岁了？', pinyin: 'nǐ de nǚ ér jǐ suì le?' }, audio: 'audio/nidenuerjisuile.mp3', options: [
+                { id: 1, text: 'Сколько лет твоему сыну?', correct: false },
+                { id: 2, text: 'Сколько лет твоей дочери?', correct: true },
+                { id: 3, text: 'Как зовут твою дочь?', correct: false },
+                { id: 4, text: 'Где твоя дочь?', correct: false }
+            ] },
+
+            // Заполнить два пропуска
+            { type: 'fill-blanks-two', sentence: { chinese: '我有 ___ 一个 ___', pinyin: 'wǒ yǒu ___ yī ge ___', translation: 'У меня есть старший брат и младшая сестра' }, audio: 'audio/woyouyigegeheyigemeimei.mp3', blanks: [{ correct: '哥哥' }, { correct: '妹妹' }], wordBank: ['哥哥', '姐姐', '妹妹', '弟弟'] },
+
+            { type: 'completion' }
+        ];
+
+        let currentIndex = 0;
+        let correctCount = 0;
+        let totalAttempts = 0;
+        let currentWordForReview = '';
+        let currentPinyinForReview = '';
+
+        const lessonNumber = 3;
+        const lessonWords = [
+            { chinese: '家', pinyin: 'jiā', translation: 'Семья' },
+            { chinese: '爸爸', pinyin: 'bà ba', translation: 'Папа' },
+            { chinese: '妈妈', pinyin: 'mā ma', translation: 'Мама' },
+            { chinese: '哥哥', pinyin: 'gē ge', translation: 'Старший брат' },
+            { chinese: '姐姐', pinyin: 'jiě jie', translation: 'Старшая сестра' },
+            { chinese: '弟弟', pinyin: 'dì di', translation: 'Младший брат' },
+            { chinese: '妹妹', pinyin: 'mèi mei', translation: 'Младшая сестра' },
+            { chinese: '爷爷', pinyin: 'yé ye', translation: 'Дедушка' },
+            { chinese: '奶奶', pinyin: 'nǎi nai', translation: 'Бабушка' }
+        ];
+
+        function getLessonWordsList() {
+            return lessonWords.map(w => `
+                <div class="word-card" data-word="${w.chinese}" data-pinyin="${w.pinyin}">
+                    <span class="word-text">${w.chinese}</span>
+                    <span class="word-pinyin">${w.pinyin}</span>
+                    <button class="add-word-btn" onclick="addWordFromList('${w.chinese}', '${w.pinyin}')">+</button>
+                </div>
+            `).join('');
+        }
+
+        window.addWordFromList = function(word, pinyin) {
+            const added = addWordToReview(word, pinyin);
+            if (added) {
+                const card = document.querySelector(`.word-card[data-word="${word}"]`);
+                if (card) card.classList.add('added');
+            }
+        };
+
+        function saveLessonResults(percentCorrect) {
+            const user = getCurrentUser();
+            if (!user) return;
+            const users = getUsers();
+            const idx = users.findIndex(u => u.id === user.id);
+            if (idx !== -1) {
+                if (!users[idx].lessonResults) users[idx].lessonResults = {};
+                users[idx].lessonResults[lessonNumber] = {
+                    correct: correctCount,
+                    total: totalAttempts,
+                    percent: percentCorrect,
+                    date: new Date().toISOString()
+                };
+                saveUsers(users);
+            }
+        }
+
+        function updateProgress() {
+            const percent = (currentIndex / exercises.length) * 100;
+            const fill = document.getElementById('progressFill');
+            if (fill) fill.style.width = percent + '%';
+        }
+
+        function showResult(isCorrect, correctAnswer, onNext, onRetry) {
+            totalAttempts++;
+            if (isCorrect) correctCount++;
+            
+            const overlay = document.createElement('div');
+            overlay.className = 'result-overlay';
+            overlay.innerHTML = `
+                <div class="result-card ${isCorrect ? 'correct' : 'wrong'}">
+                    <div class="result-icon">${isCorrect ? '🎉' : '❌'}</div>
+                    <div class="result-title">${isCorrect ? 'Правильно!' : 'Неправильно'}</div>
+                    ${!isCorrect && correctAnswer ? `<div class="result-details">${correctAnswer}</div>` : ''}
+                    <div class="action-buttons">
+                        ${isCorrect ? '<button class="next-btn" id="resultNextBtn">Далее</button>' : '<button class="tryagain-btn" id="resultRetryBtn">Попробовать еще раз</button>'}
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            
+            if (isCorrect) {
+                playSuccessSound();
+                document.getElementById('resultNextBtn').onclick = () => {
+                    overlay.remove();
+                    if (typeof onNext === 'function') onNext();
+                };
+            } else {
+                playErrorSound();
+                document.getElementById('resultRetryBtn').onclick = () => {
+                    overlay.remove();
+                    if (typeof onRetry === 'function') onRetry();
+                };
+            }
+        }
+
+        function resetLesson() {
+            if (confirm('Вы действительно хотите пройти урок заново? Весь прогресс по этому уроку будет сброшен.')) {
+                const user = getCurrentUser();
+                if (user) {
+                    const users = getUsers();
+                    const idx = users.findIndex(u => u.id === user.id);
+                    if (idx !== -1) {
+                        if (users[idx].completedLessons) {
+                            users[idx].completedLessons = users[idx].completedLessons.filter(id => id !== lessonNumber);
+                        }
+                        if (users[idx].learnedWords) {
+                            users[idx].learnedWords = users[idx].learnedWords.filter(w => !lessonWords.map(lw => lw.chinese).includes(w));
+                        }
+                        saveUsers(users);
+                        const { password: _, ...updatedUser } = users[idx];
+                        setCurrentUser(updatedUser);
+                    }
+                }
+                currentIndex = 0;
+                correctCount = 0;
+                totalAttempts = 0;
+                updateProgress();
+                renderCurrent();
+                
+                showToast('🔄 Прогресс урока сброшен. Начинаем заново!', '#4CAF50');
+            }
+        }
+
+        // ========== ОБРАБОТЧИКИ УПРАЖНЕНИЙ ==========
+        function renderImageChoice(ex) {
+            let selectedId = null;
+            const container = document.getElementById('exerciseContainer');
+            currentWordForReview = ex.word.chinese;
+            currentPinyinForReview = ex.word.pinyin;
+            
+            container.innerHTML = `
+                <div class="exercise-card">
+                    <div class="exercise-title"><i class="fas fa-image"></i> Выберите правильное изображение</div>
+                    <div class="word-display">
+                        <div class="chinese-char">${ex.word.chinese}</div>
+                        <div class="pinyin-display">${ex.word.pinyin}</div>
+                        <button class="audio-btn" id="audioBtn"><i class="fas fa-play"></i></button>
+                    </div>
+                    <div class="options-grid" id="optionsGrid">
+                        ${ex.options.map(opt => `<div class="option-card" data-id="${opt.id}"><div class="option-emoji">${opt.emoji}</div><div class="option-label">${opt.label}</div></div>`).join('')}
+                    </div>
+                    <div class="action-buttons"><button class="check-btn" id="checkBtn">Проверить</button></div>
+                </div>
+            `;
+            document.getElementById('audioBtn').onclick = () => playAudio(ex.audio);
+            setTimeout(() => playAudio(ex.audio), 100);
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.onclick = () => {
+                    document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    selectedId = parseInt(card.dataset.id);
+                };
+            });
+            document.getElementById('checkBtn').onclick = () => {
+                if (selectedId === null) { alert('Выберите ответ'); return; }
+                const selected = ex.options.find(o => o.id === selectedId);
+                showResult(selected.correct, null,
+                    () => { currentIndex++; updateProgress(); renderCurrent(); },
+                    () => { renderCurrent(); }
+                );
+            };
+            addExitButton();
+            addReviewButton(currentWordForReview, currentPinyinForReview);
+        }
+
+        function renderHanziChoice(ex) {
+            let selectedId = null;
+            const container = document.getElementById('exerciseContainer');
+            const wordMap = { 'Папа': '爸爸', 'Мама': '妈妈', 'Старший брат': '哥哥', 'Дедушка': '爷爷', 'Бабушка': '奶奶', 'Семья': '家' };
+            currentWordForReview = wordMap[ex.question] || ex.question;
+            currentPinyinForReview = '';
+            
+            container.innerHTML = `
+                <div class="exercise-card">
+                    <div class="exercise-title"><i class="fas fa-font"></i> Выберите правильный иероглиф</div>
+                    <div class="word-display">
+                        <div class="chinese-char">${ex.question}</div>
+                        <button class="audio-btn" id="audioBtn"><i class="fas fa-play"></i></button>
+                    </div>
+                    <div class="options-grid" id="optionsGrid">
+                        ${ex.options.map(opt => `<div class="option-card" data-id="${opt.id}" data-audio="${opt.audioFile || ''}"><div class="chinese-char" style="font-size: 2rem;">${opt.text}</div><div class="option-label">${opt.pinyin}</div></div>`).join('')}
+                    </div>
+                    <div class="action-buttons"><button class="check-btn" id="checkBtn">Проверить</button></div>
+                </div>
+            `;
+            document.getElementById('audioBtn').onclick = () => playAudio(ex.audio);
+            setTimeout(() => playAudio(ex.audio), 100);
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.onclick = () => {
+                    document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    selectedId = parseInt(card.dataset.id);
+                    const audioFile = card.dataset.audio;
+                    if (audioFile) { const audio = new Audio(`audio/${audioFile}`); audio.play().catch(e => {}); }
+                };
+            });
+            document.getElementById('checkBtn').onclick = () => {
+                if (selectedId === null) { alert('Выберите ответ'); return; }
+                const selected = ex.options.find(o => o.id === selectedId);
+                showResult(selected.correct, null,
+                    () => { currentIndex++; updateProgress(); renderCurrent(); },
+                    () => { renderCurrent(); }
+                );
+            };
+            addExitButton();
+            addReviewButton(currentWordForReview, currentPinyinForReview);
+        }
+
+        function renderFillBlanksNumber(ex) {
+            let blankVal = '';
+            const container = document.getElementById('exerciseContainer');
+            currentWordForReview = ex.blankCorrect === '三' ? '三' : '';
+            
+            container.innerHTML = `
+                <div class="exercise-card">
+                    <div class="exercise-title"><i class="fas fa-pen"></i> Заполните пропуск</div>
+                    <div class="sentence-container">
+                        <div class="sentence-text">${ex.sentence.chinese}</div>
+                        <div class="blanks-container">
+                            <input type="text" class="blank-input" id="blank1" placeholder="_____" style="width: 100px;">
+                        </div>
+                        <div class="translation-display">${ex.sentence.translation}</div>
+                        <button class="audio-btn" id="audioBtn"><i class="fas fa-play"></i></button>
+                    </div>
+                    <div class="word-bank" id="wordBank">
+                        ${ex.wordBank.map(w => `<span class="word-bank-item" data-word="${w}">${w}</span>`).join('')}
+                    </div>
+                    <div class="action-buttons"><button class="check-btn" id="checkBtn">Проверить</button></div>
+                </div>
+            `;
+            document.getElementById('audioBtn').onclick = () => playAudio(ex.audio);
+            setTimeout(() => playAudio(ex.audio), 100);
+            const b1 = document.getElementById('blank1');
+            b1.oninput = (e) => { blankVal = e.target.value; };
+            b1.addEventListener('click', () => { if (b1.value) { b1.value = ''; blankVal = ''; } });
+            document.querySelectorAll('.word-bank-item').forEach(item => {
+                item.onclick = () => {
+                    if (b1.value === '') {
+                        b1.value = item.dataset.word;
+                        blankVal = item.dataset.word;
+                    }
+                };
+            });
+            document.getElementById('checkBtn').onclick = () => {
+                const isCorrect = (blankVal === ex.blankCorrect);
+                showResult(isCorrect, null,
+                    () => { currentIndex++; updateProgress(); renderCurrent(); },
+                    () => { renderCurrent(); }
+                );
+            };
+            addExitButton();
+            if (currentWordForReview) addReviewButton(currentWordForReview, '');
+        }
+
+        function renderFillBlanks(ex) {
+            let blankVal = '';
+            const container = document.getElementById('exerciseContainer');
+            currentWordForReview = '我爱我的家人';
+            
+            container.innerHTML = `
+                <div class="exercise-card">
+                    <div class="exercise-title"><i class="fas fa-pen"></i> Заполните пропуск</div>
+                    <div class="sentence-container">
+                        <div class="sentence-text">${ex.sentence.chinese}</div>
+                        <div class="blanks-container">
+                            <input type="text" class="blank-input" id="blank1" placeholder="_____" style="width: 200px;">
+                        </div>
+                        <div class="translation-display">${ex.sentence.translation}</div>
+                        <button class="audio-btn" id="audioBtn"><i class="fas fa-play"></i></button>
+                    </div>
+                    <div class="word-bank" id="wordBank">
+                        ${ex.wordBank.map(w => `<span class="word-bank-item" data-word="${w}">${w}</span>`).join('')}
+                    </div>
+                    <div class="action-buttons"><button class="check-btn" id="checkBtn">Проверить</button></div>
+                </div>
+            `;
+            document.getElementById('audioBtn').onclick = () => playAudio(ex.audio);
+            setTimeout(() => playAudio(ex.audio), 100);
+            const b1 = document.getElementById('blank1');
+            b1.oninput = (e) => { blankVal = e.target.value; };
+            b1.addEventListener('click', () => { if (b1.value) { b1.value = ''; blankVal = ''; } });
+            document.querySelectorAll('.word-bank-item').forEach(item => {
+                item.onclick = () => {
+                    if (b1.value === '') {
+                        b1.value = item.dataset.word;
+                        blankVal = item.dataset.word;
+                    }
+                };
+            });
+            document.getElementById('checkBtn').onclick = () => {
+                const isCorrect = (blankVal === ex.blanks[0].correct);
+                showResult(isCorrect, null,
+                    () => { currentIndex++; updateProgress(); renderCurrent(); },
+                    () => { renderCurrent(); }
+                );
+            };
+            addExitButton();
+            addReviewButton(currentWordForReview, '');
+        }
+
+        function renderDialogueBlank(ex) {
+            let blankVal = '';
+            const container = document.getElementById('exerciseContainer');
+            currentWordForReview = ex.blankCorrect === '妈妈' ? '妈妈' : '';
+            
+            container.innerHTML = `
+                <div class="exercise-card">
+                    <div class="exercise-title"><i class="fas fa-comments"></i> Заполните пропуск в диалоге</div>
+                    <div class="sentence-container">
+                        <div class="sentence-text">${ex.sentence.chinese}</div>
+                        <div class="blanks-container">
+                            <input type="text" class="blank-input" id="blank1" placeholder="_____" style="width: 100px;">
+                        </div>
+                        <div class="translation-display">${ex.sentence.translation}</div>
+                        <button class="audio-btn" id="audioBtn"><i class="fas fa-play"></i></button>
+                    </div>
+                    <div class="word-bank" id="wordBank">
+                        ${ex.wordBank.map(w => `<span class="word-bank-item" data-word="${w}">${w}</span>`).join('')}
+                    </div>
+                    <div class="action-buttons"><button class="check-btn" id="checkBtn">Проверить</button></div>
+                </div>
+            `;
+            document.getElementById('audioBtn').onclick = () => playAudio(ex.audio);
+            setTimeout(() => playAudio(ex.audio), 100);
+            const b1 = document.getElementById('blank1');
+            b1.oninput = (e) => { blankVal = e.target.value; };
+            b1.addEventListener('click', () => { if (b1.value) { b1.value = ''; blankVal = ''; } });
+            document.querySelectorAll('.word-bank-item').forEach(item => {
+                item.onclick = () => {
+                    if (b1.value === '') {
+                        b1.value = item.dataset.word;
+                        blankVal = item.dataset.word;
+                    }
+                };
+            });
+            document.getElementById('checkBtn').onclick = () => {
+                const isCorrect = (blankVal === ex.blankCorrect);
+                showResult(isCorrect, null,
+                    () => { currentIndex++; updateProgress(); renderCurrent(); },
+                    () => { renderCurrent(); }
+                );
+            };
+            addExitButton();
+            if (currentWordForReview) addReviewButton(currentWordForReview, '');
+        }
+
+        function renderTranslationChoice(ex) {
+            let selectedId = null;
+            const container = document.getElementById('exerciseContainer');
+            currentWordForReview = ex.sentence.chinese;
+            
+            container.innerHTML = `
+                <div class="exercise-card">
+                    <div class="exercise-title"><i class="fas fa-language"></i> Выберите правильный перевод</div>
+                    <div class="word-display">
+                        <div class="chinese-char">${ex.sentence.chinese}</div>
+                        <div class="pinyin-display">${ex.sentence.pinyin}</div>
+                        <button class="audio-btn" id="audioBtn"><i class="fas fa-play"></i></button>
+                    </div>
+                    <div class="options-grid" id="optionsGrid">
+                        ${ex.options.map(opt => `<div class="option-card" data-id="${opt.id}"><div class="option-label" style="padding: 1rem;">${opt.text}</div></div>`).join('')}
+                    </div>
+                    <div class="action-buttons"><button class="check-btn" id="checkBtn">Проверить</button></div>
+                </div>
+            `;
+            document.getElementById('audioBtn').onclick = () => playAudio(ex.audio);
+            setTimeout(() => playAudio(ex.audio), 100);
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.onclick = () => {
+                    document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    selectedId = parseInt(card.dataset.id);
+                };
+            });
+            document.getElementById('checkBtn').onclick = () => {
+                if (selectedId === null) { alert('Выберите ответ'); return; }
+                const selected = ex.options.find(o => o.id === selectedId);
+                showResult(selected.correct, null,
+                    () => { currentIndex++; updateProgress(); renderCurrent(); },
+                    () => { renderCurrent(); }
+                );
+            };
+            addExitButton();
+            addReviewButton(currentWordForReview, '');
+        }
+
+        function renderFillBlanksTwo(ex) {
+            let blank1Val = '', blank2Val = '';
+            const container = document.getElementById('exerciseContainer');
+            currentWordForReview = '哥哥妹妹';
+            
+            container.innerHTML = `
+                <div class="exercise-card">
+                    <div class="exercise-title"><i class="fas fa-pen"></i> Заполните пропуски</div>
+                    <div class="sentence-container">
+                        <div class="sentence-text">${ex.sentence.chinese}</div>
+                        <div class="blanks-container">
+                            <input type="text" class="blank-input" id="blank1" placeholder="_____" style="width: 120px;">
+                            <input type="text" class="blank-input" id="blank2" placeholder="_____" style="width: 120px;">
+                        </div>
+                        <div class="translation-display">${ex.sentence.translation}</div>
+                        <button class="audio-btn" id="audioBtn"><i class="fas fa-play"></i></button>
+                    </div>
+                    <div class="word-bank" id="wordBank">
+                        ${ex.wordBank.map(w => `<span class="word-bank-item" data-word="${w}">${w}</span>`).join('')}
+                    </div>
+                    <div class="action-buttons"><button class="check-btn" id="checkBtn">Проверить</button></div>
+                </div>
+            `;
+            document.getElementById('audioBtn').onclick = () => playAudio(ex.audio);
+            setTimeout(() => playAudio(ex.audio), 100);
+            const b1 = document.getElementById('blank1');
+            const b2 = document.getElementById('blank2');
+            b1.oninput = (e) => { blank1Val = e.target.value; };
+            b2.oninput = (e) => { blank2Val = e.target.value; };
+            b1.addEventListener('click', () => { if (b1.value) { b1.value = ''; blank1Val = ''; } });
+            b2.addEventListener('click', () => { if (b2.value) { b2.value = ''; blank2Val = ''; } });
+            document.querySelectorAll('.word-bank-item').forEach(item => {
+                item.onclick = () => {
+                    if (b1.value === '') { 
+                        b1.value = item.dataset.word; 
+                        blank1Val = item.dataset.word; 
+                    } else if (b2.value === '') { 
+                        b2.value = item.dataset.word; 
+                        blank2Val = item.dataset.word; 
+                    }
+                };
+            });
+            document.getElementById('checkBtn').onclick = () => {
+                const isCorrect = (blank1Val === ex.blanks[0].correct && blank2Val === ex.blanks[1].correct);
+                showResult(isCorrect, null,
+                    () => { currentIndex++; updateProgress(); renderCurrent(); },
+                    () => { renderCurrent(); }
+                );
+            };
+            addExitButton();
+            addReviewButton('哥哥', 'gē ge');
+        }
+
+        function renderCompletion() {
+            const percentCorrect = totalAttempts > 0 ? Math.round((correctCount / totalAttempts) * 100) : 0;
+            const container = document.getElementById('exerciseContainer');
+            container.innerHTML = `
+                <div class="exercise-card" style="text-align: center;">
+                    <div class="result-icon">🎉</div>
+                    <div class="result-title" style="color: #4CAF50;">Урок пройден!</div>
+                    <div class="result-details" style="margin: 1rem 0;">
+                        <p><strong>Результаты урока:</strong></p>
+                        <p>✅ Правильно: ${correctCount}</p>
+                        <p>❌ Неправильно: ${totalAttempts - correctCount}</p>
+                        <p>📊 Процент правильности: ${percentCorrect}%</p>
+                        <hr style="margin: 1rem 0;">
+                        <p><strong>Вы выучили:</strong></p>
+                        <div class="words-list" id="wordsList">
+                            ${getLessonWordsList()}
+                        </div>
+                        <p style="font-size: 0.8rem; color: #888; margin-top: 1rem;">✨ Нажмите на +, чтобы добавить слово в тренировку для повторения ✨</p>
+                    </div>
+                    <button class="next-btn" id="finishLessonBtn">Завершить урок</button>
+                </div>
+            `;
+            
+            saveLessonResults(percentCorrect);
+            
+            const resetBtn = document.createElement('button');
+            resetBtn.className = 'reset-lesson-btn';
+            resetBtn.innerHTML = '<i class="fas fa-undo-alt"></i>';
+            resetBtn.onclick = resetLesson;
+            document.body.appendChild(resetBtn);
+            
+            document.getElementById('finishLessonBtn').onclick = () => {
+                const btn = document.querySelector('.reset-lesson-btn');
+                if (btn) btn.remove();
+                
+                const user = getCurrentUser();
+                if (user) {
+                    const users = getUsers();
+                    const idx = users.findIndex(u => u.id === user.id);
+                    if (idx !== -1) {
+                        if (!users[idx].completedLessons) users[idx].completedLessons = [];
+                        if (!users[idx].completedLessons.includes(lessonNumber)) users[idx].completedLessons.push(lessonNumber);
+                        if (!users[idx].learnedWords) users[idx].learnedWords = [];
+                        lessonWords.forEach(w => { if (!users[idx].learnedWords.includes(w.chinese)) users[idx].learnedWords.push(w.chinese); });
+                        if (!users[idx].lessonResults) users[idx].lessonResults = {};
+                        users[idx].lessonResults[lessonNumber] = { correct: correctCount, total: totalAttempts, percent: percentCorrect, date: new Date().toISOString() };
+                        if (!users[idx].dailyProgress) users[idx].dailyProgress = {};
+                        const today = new Date().toISOString().split('T')[0];
+                        if (!users[idx].dailyProgress[today]) users[idx].dailyProgress[today] = { newWords: 0, correctPercent: 0 };
+                        users[idx].dailyProgress[today].correctPercent = percentCorrect;
+                        saveUsers(users);
+                        const { password: _, ...updatedUser } = users[idx];
+                        setCurrentUser(updatedUser);
+                    }
+                }
+                window.location.href = 'lessons.html';
+            };
+        }
+
+        function renderCurrent() {
+            const existingResetBtn = document.querySelector('.reset-lesson-btn');
+            if (existingResetBtn) existingResetBtn.remove();
+            const existingExitBtn = document.querySelector('.exit-lesson-btn');
+            if (existingExitBtn) existingExitBtn.remove();
+            const existingReviewBtn = document.querySelector('.add-to-review-btn');
+            if (existingReviewBtn) existingReviewBtn.remove();
+
+            const ex = exercises[currentIndex];
+            if (!ex || ex.type === 'completion') {
+                renderCompletion();
+                return;
+            }
+            switch(ex.type) {
+                case 'image-choice': renderImageChoice(ex); break;
+                case 'hanzi-choice': renderHanziChoice(ex); break;
+                case 'fill-blanks-number': renderFillBlanksNumber(ex); break;
+                case 'fill-blanks': renderFillBlanks(ex); break;
+                case 'dialogue-blank': renderDialogueBlank(ex); break;
+                case 'fill-blanks-two': renderFillBlanksTwo(ex); break;
+                case 'translation-choice': renderTranslationChoice(ex); break;
+                default: renderImageChoice(ex);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = getCurrentUser();
+            if (!user) {
+                window.location.href = 'auth.html';
+                return;
+            }
+            currentIndex = 0;
+            correctCount = 0;
+            totalAttempts = 0;
+            updateProgress();
+            renderCurrent();
+            setupMenuProtection();
+
+            const confirmBtn = document.getElementById('confirmExitBtn');
+            const cancelBtn = document.getElementById('cancelExitBtn');
+            const modal = document.getElementById('exitLessonModal');
+            if (confirmBtn) confirmBtn.onclick = () => { if (pendingExitUrl) window.location.href = pendingExitUrl; closeExitModal(); };
+            if (cancelBtn) cancelBtn.onclick = closeExitModal;
+            if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) closeExitModal(); });
+        });
+    </script>
+
+    <div id="exitLessonModal" class="modal-overlay">
+        <div class="modal-container" style="max-width: 400px;">
+            <div class="modal-icon">⚠️</div>
+            <h3 class="modal-title">Выйти из урока?</h3>
+            <p class="modal-text">Весь непройденный прогресс будет потерян.<br>Вы уверены, что хотите выйти?</p>
+            <div class="modal-buttons">
+                <button id="confirmExitBtn" class="modal-btn primary">Да, выйти</button>
+                <button id="cancelExitBtn" class="modal-btn secondary">Отмена</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('SW зарегистрирован:', reg))
+                .catch(err => console.log('SW ошибка:', err));
+        }
+    </script>
+    
+</body>
+</html>

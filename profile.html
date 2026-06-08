@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Профиль — cHeeSecaKe 1</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#7B001C">
+    <link rel="icon" href="images/logo.png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* Дополнительные стили для профиля */
+        .profile-layout {
+            display: flex;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* Левая колонка — информация о пользователе */
+        .profile-left {
+            flex: 1;
+            background: white;
+            border-radius: 32px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid #eaeaea;
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+
+        /* Правая колонка — статистика */
+        .profile-right {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Аватар */
+        .avatar-section {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 0.5rem;
+            position: relative;
+            cursor: pointer;
+        }
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #7B001C;
+        }
+        .avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #7B001C 0%, #480607 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        .avatar-upload-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: #7B001C;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid white;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+        .avatar-upload-btn:hover {
+            background: #480607;
+            transform: scale(1.05);
+        }
+
+        /* Информация о пользователе */
+        .user-info {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .user-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+        .user-email {
+            font-size: 0.85rem;
+            color: #6c6c6c;
+            margin-top: 0.25rem;
+        }
+        .user-details {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eaeaea;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+        }
+        .detail-label {
+            color: #6c6c6c;
+            font-size: 0.9rem;
+        }
+        .detail-value {
+            font-weight: 500;
+            color: #1a1a1a;
+        }
+
+        /* Карточки статистики */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+        .stat-card-profile {
+            background: white;
+            border-radius: 24px;
+            padding: 1.2rem;
+            text-align: center;
+            border: 1px solid #eaeaea;
+            transition: all 0.2s;
+        }
+        .stat-card-profile:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        .stat-icon {
+            font-size: 2rem;
+            color: #7B001C;
+            margin-bottom: 0.5rem;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+        .stat-label {
+            font-size: 0.75rem;
+            color: #6c6c6c;
+            margin-top: 0.25rem;
+        }
+
+        /* Блок с результатами уроков */
+        .results-section {
+            background: white;
+            border-radius: 24px;
+            padding: 1.5rem;
+            border: 1px solid #eaeaea;
+        }
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #7B001C;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .results-table th, .results-table td {
+            padding: 0.75rem;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .results-table th {
+            font-weight: 600;
+            color: #6c6c6c;
+            font-size: 0.8rem;
+        }
+        .progress-bar-small {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 6px;
+            width: 80px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        .progress-fill-small {
+            background: #7B001C;
+            border-radius: 10px;
+            height: 100%;
+        }
+
+        /* Динамика прогресса */
+        .progress-days {
+            background: white;
+            border-radius: 24px;
+            padding: 1.5rem;
+            border: 1px solid #eaeaea;
+        }
+        .days-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+        .day-card {
+            background: #f8f8f8;
+            border-radius: 12px;
+            padding: 0.5rem;
+            text-align: center;
+            min-width: 60px;
+            transition: all 0.2s;
+        }
+        .day-card:hover {
+            background: #FFF0F2;
+            transform: translateY(-2px);
+        }
+        .day-date {
+            font-size: 0.7rem;
+            color: #888;
+        }
+        .day-percent {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #7B001C;
+        }
+        .day-new-words {
+            font-size: 0.6rem;
+            color: #4CAF50;
+        }
+
+        /* Кнопки */
+        .action-buttons-profile {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+        .profile-action-btn {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .profile-action-btn.reset {
+            background: white;
+            border: 1px solid #ff4444;
+            color: #ff4444;
+        }
+        .profile-action-btn.reset:hover {
+            background: #ff4444;
+            color: white;
+        }
+        .profile-action-btn.logout {
+            background: white;
+            border: 1px solid #7B001C;
+            color: #7B001C;
+        }
+        .profile-action-btn.logout:hover {
+            background: #7B001C;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .profile-layout {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            .profile-left {
+                position: static;
+            }
+            .stats-cards {
+                grid-template-columns: 1fr;
+            }
+            .results-table {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Мобильная шапка -->
+    <div class="mobile-header">
+        <div class="mobile-header-logo">
+            <img src="images/logo.png" alt="cHeeSecaKe" onerror="this.src='https://placehold.co/32x32/7B001C/white?text=CS'">
+            <span>cHeeSecaKe <span class="one">1</span></span>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="images/logo.png" alt="cHeeSecaKe" class="sidebar-logo-img">
+                <span class="sidebar-title">cHeeSecaKe <span class="one">1</span></span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="lessons.html" class="sidebar-item">
+                    <span class="sidebar-icon">📚</span> Уроки
+                </a>
+                <a href="profile.html" class="sidebar-item active">
+                    <span class="sidebar-icon">👤</span> Профиль
+                </a>
+                <a href="training.html" class="sidebar-item">
+                    <span class="sidebar-icon">🏋️</span> Тренировка
+                </a>
+                <a href="letters.html" class="sidebar-item">
+                    <span class="sidebar-icon">🔤</span> Буквы и тоны
+                </a>
+                <a href="about.html" class="sidebar-item">
+                    <span class="sidebar-icon">🍰</span> О нас
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content-with-sidebar">
+            <div class="profile-layout" id="profileContent">
+                <!-- Загрузка... -->
+                <div style="text-align: center; padding: 3rem;">Загрузка профиля...</div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function renderProfile() {
+            const user = getCurrentUser();
+            if (!user) {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            const users = getUsers();
+            const userData = users.find(u => u.id === user.id) || user;
+            
+            // Статистика
+            const completedLessonsCount = user.completedLessons?.length || 0;
+            const learnedWordsCount = user.learnedWords?.length || 0;
+            const reviewWordsCount = user.wordsToReview?.length || 0;
+            
+            // Процент правильных ответов в тестах
+            let totalCorrect = 0;
+            let totalAnswers = 0;
+            const lessonResults = user.lessonResults || {};
+            for (let lessonId in lessonResults) {
+                totalCorrect += lessonResults[lessonId].correct || 0;
+                totalAnswers += lessonResults[lessonId].total || 0;
+            }
+            const overallPercent = totalAnswers > 0 ? Math.round((totalCorrect / totalAnswers) * 100) : 0;
+            
+            // Дней в приложении
+            let daysActive = 1;
+            let registrationDateFormatted = '—';
+            if (user.registrationDate) {
+                const regDate = new Date(user.registrationDate);
+                const today = new Date();
+                const diffTime = Math.abs(today - regDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                daysActive = diffDays;
+                registrationDateFormatted = regDate.toLocaleDateString('ru-RU', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+            }
+            
+            // Динамика прогресса по дням
+            const dailyProgress = user.dailyProgress || {};
+            const daysArray = Object.entries(dailyProgress)
+                .sort((a, b) => new Date(a[0]) - new Date(b[0]))
+                .slice(-7); // последние 7 дней
+            
+            // Таблица результатов уроков
+            const resultsArray = [];
+            for (let lessonId in lessonResults) {
+                resultsArray.push({
+                    id: lessonId,
+                    ...lessonResults[lessonId]
+                });
+            }
+            resultsArray.sort((a, b) => a.id - b.id);
+            
+            // HTML для результатов уроков
+            let resultsHtml = '';
+            if (resultsArray.length === 0) {
+                resultsHtml = '<tr><td colspan="4" style="text-align: center; padding: 2rem;">Пока нет пройденных уроков</td></tr>';
+            } else {
+                resultsHtml = resultsArray.map(r => `
+                    <tr>
+                        <td>Урок ${r.id}</td>
+                        <td>${r.correct}/${r.total}</td>
+                        <td>${r.percent}%</td>
+                        <td>
+                            <div class="progress-bar-small">
+                                <div class="progress-fill-small" style="width: ${r.percent}%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+            
+            // HTML для динамики по дням
+            let daysHtml = '';
+            if (daysArray.length === 0) {
+                daysHtml = '<div style="text-align: center; padding: 1rem; color: #999;">Пока нет данных. Проходите уроки, чтобы видеть прогресс!</div>';
+            } else {
+                daysHtml = daysArray.map(([date, data]) => {
+                    const formattedDate = new Date(date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+                    return `
+                        <div class="day-card">
+                            <div class="day-date">${formattedDate}</div>
+                            <div class="day-percent">${data.correctPercent || 0}%</div>
+                            <div class="day-new-words">+${data.newWords || 0} слов</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            // Аватар
+            const avatarHtml = user.avatar 
+                ? `<img src="${user.avatar}" alt="avatar">` 
+                : `<div class="avatar-placeholder"><i class="fas fa-user-circle"></i></div>`;
+            
+            const container = document.getElementById('profileContent');
+            container.innerHTML = `
+                <!-- Левая колонка -->
+                <div class="profile-left">
+                    <div class="avatar-section">
+                        <div class="profile-avatar" id="avatarClick">
+                            ${avatarHtml}
+                            <label for="avatarUpload" class="avatar-upload-btn">
+                                <i class="fas fa-camera"></i>
+                            </label>
+                            <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+                        </div>
+                    </div>
+                    
+                    <div class="user-info">
+                        <div class="user-name">${user.name || 'Пользователь'}</div>
+                        <div class="user-email">${user.email || '—'}</div>
+                    </div>
+                    
+                    <div class="user-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Возраст</span>
+                            <span class="detail-value">${user.age || '—'} лет</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Дата регистрации</span>
+                            <span class="detail-value">${registrationDateFormatted}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Дней в приложении</span>
+                            <span class="detail-value">${daysActive}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Карточек к повторению</span>
+                            <span class="detail-value">${reviewWordsCount}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons-profile">
+                        <button class="profile-action-btn reset" id="resetProgressBtn">
+                            <i class="fas fa-trash-alt"></i> Сбросить прогресс
+                        </button>
+                        <button class="profile-action-btn logout" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i> Выйти из аккаунта
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Правая колонка -->
+                <div class="profile-right">
+                    <!-- Карточки статистики -->
+                    <div class="stats-cards">
+                        <div class="stat-card-profile">
+                            <div class="stat-icon"><i class="fas fa-book"></i></div>
+                            <div class="stat-number">${completedLessonsCount}</div>
+                            <div class="stat-label">Пройдено уроков</div>
+                        </div>
+                        <div class="stat-card-profile">
+                            <div class="stat-icon"><i class="fas fa-font"></i></div>
+                            <div class="stat-number">${learnedWordsCount}</div>
+                            <div class="stat-label">Выучено слов</div>
+                        </div>
+                        <div class="stat-card-profile">
+                            <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                            <div class="stat-number">${overallPercent}%</div>
+                            <div class="stat-label">Общий процент</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Результаты уроков -->
+                    <div class="results-section">
+                        <div class="section-title">
+                            <i class="fas fa-clipboard-list"></i> Результаты уроков
+                        </div>
+                        <table class="results-table">
+                            <thead>
+                                <tr><th>Урок</th><th>Правильно</th><th>%</th><th>Прогресс</th></tr>
+                            </thead>
+                            <tbody>
+                                ${resultsHtml}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Динамика прогресса по дням -->
+                    <div class="progress-days">
+                        <div class="section-title">
+                            <i class="fas fa-calendar-week"></i> Динамика прогресса (последние 7 дней)
+                        </div>
+                        <div class="days-grid">
+                            ${daysHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Обработчики
+            const avatarUpload = document.getElementById('avatarUpload');
+            if (avatarUpload) {
+                avatarUpload.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            const usersList = getUsers();
+                            const idx = usersList.findIndex(u => u.id === user.id);
+                            if (idx !== -1) {
+                                usersList[idx].avatar = event.target.result;
+                                saveUsers(usersList);
+                                const { password: _, ...updatedUser } = usersList[idx];
+                                setCurrentUser(updatedUser);
+                                renderProfile();
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+            
+            const resetBtn = document.getElementById('resetProgressBtn');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                    if (confirm('ВНИМАНИЕ! Это действие удалит весь ваш прогресс: пройденные уроки, выученные слова, статистику. Вы уверены, что хотите начать всё заново?')) {
+                        const usersList = getUsers();
+                        const idx = usersList.findIndex(u => u.id === user.id);
+                        if (idx !== -1) {
+                            usersList[idx].completedLessons = [];
+                            usersList[idx].learnedWords = [];
+                            usersList[idx].wordsToReview = [];
+                            usersList[idx].lessonResults = {};
+                            usersList[idx].dailyProgress = {};
+                            saveUsers(usersList);
+                            const { password: _, ...updatedUser } = usersList[idx];
+                            setCurrentUser(updatedUser);
+                            renderProfile();
+                            alert('Прогресс успешно сброшен!');
+                        }
+                    }
+                });
+            }
+            
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => {
+                    localStorage.removeItem('cheesecake_current_user');
+                    window.location.href = 'auth.html';
+                });
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = getCurrentUser();
+            if (!user) {
+                window.location.href = 'auth.html';
+                return;
+            }
+            renderProfile();
+        });
+    </script>
+</body>
+</html>

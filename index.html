@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="cHeeSecaKe">
+<link rel="apple-touch-icon" href="images/logo-192.png">
+    <title>cHeeSecaKe 1 — Изучай китайский за месяц</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#7B001C">
+    <link rel="icon" href="images/logo.png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="intro-container">
+        <div class="intro-card">
+            <div class="intro-left">
+                <div class="logo-box">
+                    <img src="images/hello-cake.png" alt="cHeeSecaKe logo" class="logo-img" onerror="this.src='https://placehold.co/400x400/DE2910/white?text=CS'">
+                </div>
+            </div>
+            <div class="intro-right">
+                <h1 class="intro-title">cHeeSecaKe <span class="one">1</span></h1>
+                <p class="intro-tagline">30 уроков. 1 месяц. HSK 1.</p>
+                <div class="intro-divider"></div>
+                <p class="intro-text">
+                    <strong>cHeeSecaKe</strong> — это офлайн-приложение для изучения китайского языка с нуля.<br><br>
+                    Вы пройдёте <strong>30 уроков</strong> за месяц и достигнете уровня <strong>HSK 1</strong>: 
+                    научитесь читать, писать базовые иероглифы, понимать тоны и строить простые предложения.<br><br>
+                    🎯 <strong>Наша цель</strong> — сделать китайский понятным и доступным даже без интернета.
+                </p>
+                <button class="btn-next" id="nextBtn">
+                    Далее <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            window.location.href = 'auth.html';
+        });
+    </script>
+    <script>
+    // Регистрация Service Worker для офлайн-работы
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+                console.log('Service Worker зарегистрирован:', registration);
+            })
+            .catch((error) => {
+                console.log('Ошибка регистрации Service Worker:', error);
+            });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="cHeeSecaKe">
+    <link rel="apple-touch-icon" href="images/logo-192.png">
+    <title>О нас — cHeeSecaKe 1</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#7B001C">
+    <link rel="icon" href="images/logo.png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .about-page-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Hero секция с фото */
+        .about-hero {
+            background: linear-gradient(135deg, #FFF5F5 0%, #FFE8E8 100%);
+            border-radius: 32px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+        }
+        .about-hero-image {
+            flex: 1;
+            text-align: center;
+        }
+        .about-hero-image img {
+            max-width: 180px;
+            border-radius: 32px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .about-hero-text {
+            flex: 2;
+        }
+        .about-hero-text h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #7B001C;
+            margin-bottom: 0.5rem;
+        }
+        .about-hero-text .tagline {
+            font-size: 1.1rem;
+            color: #6c6c6c;
+            margin-bottom: 1rem;
+        }
+        .about-hero-text p {
+            color: #4a4a4a;
+            line-height: 1.6;
+        }
+
+        /* Карточки-секции */
+        .about-section-card {
+            background: white;
+            border-radius: 28px;
+            padding: 1.8rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #eaeaea;
+            transition: all 0.2s;
+        }
+        .about-section-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.2rem;
+        }
+        .section-header .icon {
+            font-size: 1.8rem;
+        }
+        .section-header h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #7B001C;
+        }
+        .section-content {
+            color: #4a4a4a;
+            line-height: 1.6;
+        }
+
+        /* Список в два столбца */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem;
+            background: #f8f8f8;
+            border-radius: 16px;
+        }
+        .feature-item .feature-icon {
+            font-size: 1.5rem;
+        }
+        .feature-item .feature-text {
+            font-weight: 500;
+        }
+
+        /* Статистика в 3 колонки */
+        .stats-row {
+            display: flex;
+            justify-content: space-around;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        .stat-box {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            background: linear-gradient(135deg, #FFF5F5 0%, #FFE8E8 100%);
+            border-radius: 20px;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #7B001C;
+        }
+        .stat-label {
+            font-size: 0.8rem;
+            color: #6c6c6c;
+            margin-top: 0.25rem;
+        }
+
+        /* Блок с преимуществами */
+        .advantages-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        .advantage-item {
+            text-align: center;
+            padding: 1rem;
+            background: #f8f8f8;
+            border-radius: 20px;
+        }
+        .advantage-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .advantage-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        .advantage-desc {
+            font-size: 0.75rem;
+            color: #6c6c6c;
+        }
+
+        @media (max-width: 768px) {
+            .about-page-container {
+                padding: 1rem;
+            }
+            .about-hero {
+                flex-direction: column;
+                text-align: center;
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .advantages-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-row {
+                flex-direction: column;
+            }
+            .section-header {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-header">
+        <div class="mobile-header-logo">
+            <img src="images/logo.png" alt="cHeeSecaKe" onerror="this.src='https://placehold.co/32x32/7B001C/white?text=CS'">
+            <span>cHeeSecaKe <span class="one">1</span></span>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="images/logo.png" alt="cHeeSecaKe" class="sidebar-logo-img">
+                <span class="sidebar-title">cHeeSecaKe <span class="one">1</span></span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="lessons.html" class="sidebar-item">
+                    <span class="sidebar-icon">📚</span> Уроки
+                </a>
+                <a href="profile.html" class="sidebar-item">
+                    <span class="sidebar-icon">👤</span> Профиль
+                </a>
+                <a href="training.html" class="sidebar-item">
+                    <span class="sidebar-icon">🏋️</span> Тренировка
+                </a>
+                <a href="letters.html" class="sidebar-item">
+                    <span class="sidebar-icon">🔤</span> Буквы и тоны
+                </a>
+                <a href="about.html" class="sidebar-item active">
+                    <span class="sidebar-icon">🍰</span> О нас
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content-with-sidebar">
+            <div class="about-page-container">
+                <!-- Hero секция с фото -->
+                <div class="about-hero">
+                    <div class="about-hero-image">
+                        <img src="images/hello-cake.png" alt="cHeeSecaKe" onerror="this.src='https://placehold.co/180x180/7B001C/white?text=🍰'">
+                    </div>
+                    <div class="about-hero-text">
+                        <h1>cHeeSecaKe 1</h1>
+                        <div class="tagline">30 уроков. 1 месяц. HSK 1.</div>
+                        <p>Мы создали это приложение, чтобы сделать изучение китайского языка доступным, понятным и увлекательным. Наша цель — помочь вам достичь первого уровня HSK всего за месяц регулярных занятий.</p>
+                    </div>
+                </div>
+
+                <!-- Что мы предлагаем -->
+                <div class="about-section-card">
+                    <div class="section-header">
+                        <span class="icon">🎯</span>
+                        <h2>Что мы предлагаем</h2>
+                    </div>
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <span class="feature-icon">📚</span>
+                            <span class="feature-text">30 структурированных уроков</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">🎧</span>
+                            <span class="feature-text">Тренировка тонов и произношения</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✍️</span>
+                            <span class="feature-text">Изучение инициалей и финалей</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">🔄</span>
+                            <span class="feature-text">Система интервальных повторений</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">📱</span>
+                            <span class="feature-text">Полная офлайн-работа</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">📊</span>
+                            <span class="feature-text">Статистика прогресса</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ваш результат -->
+                <div class="about-section-card">
+                    <div class="section-header">
+                        <span class="icon">📈</span>
+                        <h2>Ваш результат через месяц</h2>
+                    </div>
+                    <div class="stats-row">
+                        <div class="stat-box">
+                            <div class="stat-number">150+</div>
+                            <div class="stat-label">базовых слов</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">50+</div>
+                            <div class="stat-label">иероглифов</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">HSK 1</div>
+                            <div class="stat-label">уверенный уровень</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Почему cHeeSecaKe -->
+                <div class="about-section-card">
+                    <div class="section-header">
+                        <span class="icon">💡</span>
+                        <h2>Почему cHeeSecaKe?</h2>
+                    </div>
+                    <div class="section-content">
+                        <p>Название сочетает в себе "cheese" и "cake" — что-то тёплое, уютное и сладкое. Именно такие эмоции мы хотим дарить при изучении китайского языка. А "1" означает вашу первую цель — HSK 1. Дальше — больше! 🎯</p>
+                    </div>
+                </div>
+
+                <!-- Преимущества -->
+                <div class="about-section-card">
+                    <div class="section-header">
+                        <span class="icon">⭐</span>
+                        <h2>Наши преимущества</h2>
+                    </div>
+                    <div class="advantages-grid">
+                        <div class="advantage-item">
+                            <div class="advantage-icon">🎓</div>
+                            <div class="advantage-title">Системный подход</div>
+                            <div class="advantage-desc">От простого к сложному</div>
+                        </div>
+                        <div class="advantage-item">
+                            <div class="advantage-icon">⚡</div>
+                            <div class="advantage-title">Быстрый результат</div>
+                            <div class="advantage-desc">HSK 1 за 1 месяц</div>
+                        </div>
+                        <div class="advantage-item">
+                            <div class="advantage-icon">🔒</div>
+                            <div class="advantage-title">Полная приватность</div>
+                            <div class="advantage-desc">Данные только на устройстве</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('SW зарегистрирован:', reg))
+                .catch(err => console.log('SW ошибка:', err));
+        }
+    </script>
+</body>
+</html>

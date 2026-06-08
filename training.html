@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="cHeeSecaKe">
+<link rel="apple-touch-icon" href="images/logo-192.png">
+    <title>Тренировка — cHeeSecaKe 1</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#7B001C">
+    <link rel="icon" href="images/logo.png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .training-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .flashcard {
+            background: white;
+            border-radius: 32px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #eaeaea;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .flashcard:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+        .flashcard-front, .flashcard-back {
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .flashcard-chinese {
+            font-size: 4rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+        }
+        .flashcard-pinyin {
+            font-size: 1.3rem;
+            color: #7B001C;
+            margin-bottom: 0.5rem;
+        }
+        .flashcard-translation {
+            font-size: 1.2rem;
+            color: #6c6c6c;
+        }
+        .flashcard-hint {
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: #999;
+        }
+        .flip-icon {
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+        .audio-card-btn {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            background: #7B001C;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        .audio-card-btn:hover {
+            background: #480607;
+            transform: scale(1.05);
+        }
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .action-btn {
+            padding: 0.85rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .action-btn.known {
+            background: #4CAF50;
+            color: white;
+        }
+        .action-btn.known:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+        .action-btn.unknown {
+            background: #ff9800;
+            color: white;
+        }
+        .action-btn.unknown:hover {
+            background: #e68900;
+            transform: translateY(-2px);
+        }
+        .action-btn.reset {
+            background: white;
+            border: 1px solid #7B001C;
+            color: #7B001C;
+        }
+        .action-btn.reset:hover {
+            background: #FFF0F2;
+            transform: translateY(-2px);
+        }
+        .action-btn.remove {
+            background: white;
+            border: 1px solid #ff4444;
+            color: #ff4444;
+        }
+        .action-btn.remove:hover {
+            background: #ff4444;
+            color: white;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 32px;
+            border: 1px solid #eaeaea;
+        }
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        .empty-state-icon img {
+            width: 100px;
+            height: 100px;
+            border-radius: 20px;
+        }
+        .empty-state-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #7B001C;
+        }
+        .empty-state-text {
+            color: #6c6c6c;
+            margin-bottom: 1.5rem;
+        }
+        .empty-state-btn {
+            background: #7B001C;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .empty-state-btn:hover {
+            background: #480607;
+            transform: translateY(-2px);
+        }
+        .progress-container {
+            margin-bottom: 1.5rem;
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #6c6c6c;
+            margin-bottom: 0.5rem;
+        }
+        .progress-bar-training {
+            background: #e0e0e0;
+            border-radius: 20px;
+            height: 8px;
+            overflow: hidden;
+        }
+        .progress-fill-training {
+            background: #7B001C;
+            border-radius: 20px;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        .random-words-section {
+            margin-top: 2rem;
+            background: white;
+            border-radius: 32px;
+            padding: 1.5rem;
+            border: 1px solid #eaeaea;
+        }
+        .random-words-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #7B001C;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .random-words-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 0.75rem;
+        }
+        .random-word-card {
+            background: #f8f8f8;
+            border: 1px solid #eaeaea;
+            border-radius: 20px;
+            padding: 0.75rem;
+            text-align: center;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .random-word-card:hover {
+            background: #FFF0F2;
+            border-color: #7B001C;
+            transform: translateY(-2px);
+        }
+        .random-word-chinese {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .random-word-pinyin {
+            font-size: 0.7rem;
+            color: #888;
+        }
+        .random-word-translation {
+            font-size: 0.7rem;
+            color: #6c6c6c;
+            margin-top: 0.25rem;
+        }
+        .refresh-random-btn {
+            background: #7B001C;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .refresh-random-btn:hover {
+            background: #480607;
+            transform: translateY(-2px);
+        }
+        @media (max-width: 600px) {
+            .training-container {
+                padding: 1rem;
+            }
+            .flashcard-chinese {
+                font-size: 2.5rem;
+            }
+            .action-buttons {
+                flex-direction: column;
+            }
+            .action-btn {
+                justify-content: center;
+            }
+            .random-words-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .random-words-title {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; transform: translateX(-50%) scale(1); }
+            70% { opacity: 1; }
+            100% { opacity: 0; transform: translateX(-50%) scale(0.9); visibility: hidden; }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-header">
+        <div class="mobile-header-logo">
+            <img src="images/logo.png" alt="cHeeSecaKe" onerror="this.src='https://placehold.co/32x32/7B001C/white?text=CS'">
+            <span>cHeeSecaKe <span class="one">1</span></span>
+        </div>
+    </div>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="images/logo.png" alt="cHeeSecaKe" class="sidebar-logo-img">
+                <span class="sidebar-title">cHeeSecaKe <span class="one">1</span></span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="lessons.html" class="sidebar-item">
+                    <span class="sidebar-icon">📚</span> Уроки
+                </a>
+                <a href="profile.html" class="sidebar-item">
+                    <span class="sidebar-icon">👤</span> Профиль
+                </a>
+                <a href="training.html" class="sidebar-item active">
+                    <span class="sidebar-icon">🏋️</span> Тренировка
+                </a>
+                <a href="letters.html" class="sidebar-item">
+                    <span class="sidebar-icon">🔤</span> Буквы и тоны
+                </a>
+                <a href="about.html" class="sidebar-item">
+                    <span class="sidebar-icon">🍰</span> О нас
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content-with-sidebar">
+            <div class="training-container">
+                <div id="trainingContent"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // ========== БАЗА ДАННЫХ СЛОВ ==========
+        const wordDatabase = {
+            '你好': { pinyin: 'nǐ hǎo', translation: 'Здравствуйте' },
+            '我': { pinyin: 'wǒ', translation: 'Я' },
+            '谢谢': { pinyin: 'xiè xie', translation: 'Спасибо' },
+            '你': { pinyin: 'nǐ', translation: 'Ты' },
+            '对不起': { pinyin: 'duì bu qǐ', translation: 'Извините' },
+            '再见': { pinyin: 'zài jiàn', translation: 'До свидания' },
+            '家': { pinyin: 'jiā', translation: 'Семья' },
+            '爸爸': { pinyin: 'bà ba', translation: 'Папа' },
+            '妈妈': { pinyin: 'mā ma', translation: 'Мама' },
+            '哥哥': { pinyin: 'gē ge', translation: 'Старший брат' },
+            '姐姐': { pinyin: 'jiě jie', translation: 'Старшая сестра' },
+            '弟弟': { pinyin: 'dì di', translation: 'Младший брат' },
+            '妹妹': { pinyin: 'mèi mei', translation: 'Младшая сестра' },
+            '爷爷': { pinyin: 'yé ye', translation: 'Дедушка' },
+            '奶奶': { pinyin: 'nǎi nai', translation: 'Бабушка' },
+            '一': { pinyin: 'yī', translation: 'Один' },
+            '二': { pinyin: 'èr', translation: 'Два' },
+            '三': { pinyin: 'sān', translation: 'Три' },
+            '四': { pinyin: 'sì', translation: 'Четыре' },
+            '五': { pinyin: 'wǔ', translation: 'Пять' },
+            '六': { pinyin: 'liù', translation: 'Шесть' },
+            '七': { pinyin: 'qī', translation: 'Семь' },
+            '八': { pinyin: 'bā', translation: 'Восемь' },
+            '九': { pinyin: 'jiǔ', translation: 'Девять' },
+            '十': { pinyin: 'shí', translation: 'Десять' },
+            '零': { pinyin: 'líng', translation: 'Ноль' },
+            '我叫安娜': { pinyin: 'wǒ jiào ān nà', translation: 'Меня зовут Анна' },
+            '我爱我的家人': { pinyin: 'wǒ ài wǒ de jiā rén', translation: 'Я люблю свою семью' }
+        };
+
+        const audioFileMap = {
+            '你好': 'nihao',
+            '我': 'wo',
+            '谢谢': 'xiexie',
+            '你': 'ni',
+            '对不起': 'duibuqi',
+            '再见': 'zaijian',
+            '家': 'jia',
+            '爸爸': 'baba',
+            '妈妈': 'mama',
+            '哥哥': 'gege',
+            '姐姐': 'jiejie',
+            '弟弟': 'didi',
+            '妹妹': 'meimei',
+            '爷爷': 'yeye',
+            '奶奶': 'nainai',
+            '一': 'yi',
+            '二': 'er',
+            '三': 'san',
+            '四': 'si',
+            '五': 'wu',
+            '六': 'liu',
+            '七': 'qi',
+            '八': 'ba',
+            '九': 'jiu',
+            '十': 'shi',
+            '零': 'ling',
+            '我叫安娜': 'wojiaoanna',
+            '我爱我的家人': 'woaiwojiaren'
+        };
+
+        const allAvailableWords = Object.keys(wordDatabase);
+
+        // ========== ОСНОВНЫЕ ПЕРЕМЕННЫЕ ==========
+        let reviewWords = [];
+        let currentIndex = 0;
+        let isFlipped = false;
+        let randomWords = [];
+
+        // ========== ФУНКЦИЯ ВОСПРОИЗВЕДЕНИЯ АУДИО ==========
+        function playWordAudio(word) {
+            const audioFileName = audioFileMap[word];
+            if (audioFileName) {
+                const audio = new Audio(`audio/${audioFileName}.mp3`);
+                audio.play().catch(e => console.log(`Аудио для ${word} (${audioFileName}.mp3) не найдено`));
+            }
+        }
+
+        // ========== ЗАГРУЗКА СЛОВ ДЛЯ ТРЕНИРОВКИ ==========
+        function loadReviewWords() {
+            const user = getCurrentUser();
+            if (!user) return [];
+            
+            const users = getUsers();
+            const userData = users.find(u => u.id === user.id);
+            const storedWords = userData?.wordsToReview || [];
+            
+            return storedWords.map(word => ({
+                word: word,
+                pinyin: wordDatabase[word]?.pinyin || '',
+                translation: wordDatabase[word]?.translation || ''
+            })).filter(w => w.word);
+        }
+
+        function saveReviewWords(words) {
+            const user = getCurrentUser();
+            if (!user) return;
+            
+            const users = getUsers();
+            const idx = users.findIndex(u => u.id === user.id);
+            if (idx !== -1) {
+                users[idx].wordsToReview = words;
+                saveUsers(users);
+                const { password: _, ...updatedUser } = users[idx];
+                setCurrentUser(updatedUser);
+            }
+        }
+
+        function removeWordFromReview(wordToRemove) {
+            const user = getCurrentUser();
+            if (!user) return;
+            
+            const users = getUsers();
+            const idx = users.findIndex(u => u.id === user.id);
+            if (idx !== -1) {
+                const words = users[idx].wordsToReview || [];
+                users[idx].wordsToReview = words.filter(w => w !== wordToRemove);
+                saveUsers(users);
+                const { password: _, ...updatedUser } = users[idx];
+                setCurrentUser(updatedUser);
+                showToast(`❌ Слово удалено из тренировки`, '#ff4444');
+                initTraining();
+            }
+        }
+
+        // ========== СЛУЧАЙНЫЕ СЛОВА ==========
+        function getRandomWords(count = 5) {
+            const shuffled = [...allAvailableWords];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled.slice(0, count).map(word => ({
+                word: word,
+                pinyin: wordDatabase[word]?.pinyin || '',
+                translation: wordDatabase[word]?.translation || ''
+            }));
+        }
+
+        function refreshRandomWords() {
+            randomWords = getRandomWords(5);
+            renderRandomWordsSection();
+        }
+
+        function addRandomWordToReview(word) {
+            addWordToTraining(word);
+        }
+
+        // ========== ОСНОВНЫЕ ДЕЙСТВИЯ С ТРЕНИРОВКОЙ ==========
+        function addWordToTraining(word) {
+            const user = getCurrentUser();
+            if (!user) return false;
+            
+            const users = getUsers();
+            const idx = users.findIndex(u => u.id === user.id);
+            if (idx !== -1) {
+                if (!users[idx].wordsToReview) users[idx].wordsToReview = [];
+                if (!users[idx].wordsToReview.includes(word)) {
+                    users[idx].wordsToReview.push(word);
+                    saveUsers(users);
+                    showToast(`✅ "${word}" добавлено в тренировку!`, '#4CAF50');
+                    initTraining();
+                    return true;
+                } else {
+                    showToast(`⚠️ "${word}" уже в тренировке!`, '#ff9800');
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        function showToast(message, color) {
+            const toast = document.createElement('div');
+            toast.textContent = message;
+            toast.style.cssText = `position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: ${color}; color: white; padding: 10px 20px; border-radius: 40px; font-size: 14px; z-index: 10000; animation: fadeOut 2s forwards;`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
+        }
+
+        function markAsKnown() {
+            if (reviewWords.length === 0) return;
+            const currentWord = reviewWords[currentIndex];
+            if (!currentWord) return;
+            
+            removeWordFromReview(currentWord.word);
+            showToast(`✅ "${currentWord.word}" — отлично! Слово удалено из тренировки`, '#4CAF50');
+            nextCard();
+        }
+
+        function markAsUnknown() {
+            if (reviewWords.length === 0) return;
+            showToast(`💪 "${reviewWords[currentIndex]?.word}" — продолжим учить!`, '#ff9800');
+            nextCard();
+        }
+
+        function nextCard() {
+            if (currentIndex + 1 < reviewWords.length) {
+                currentIndex++;
+                isFlipped = false;
+                renderCard();
+            } else if (reviewWords.length === 0) {
+                renderEmptyState();
+            } else {
+                currentIndex = 0;
+                isFlipped = false;
+                renderCard();
+                showToast('🔄 Круг завершён! Начинаем заново.', '#4CAF50');
+            }
+        }
+
+        function flipCard() {
+            isFlipped = !isFlipped;
+            renderCard();
+        }
+
+        function resetTraining() {
+            if (confirm('Вы уверены, что хотите удалить ВСЕ слова из тренировки?')) {
+                saveReviewWords([]);
+                initTraining();
+                showToast('🗑️ Все слова удалены из тренировки', '#ff4444');
+            }
+        }
+
+        function removeCurrentWord() {
+            if (reviewWords.length === 0) return;
+            const currentWord = reviewWords[currentIndex];
+            removeWordFromReview(currentWord.word);
+        }
+
+        // ========== ОТРИСОВКА КОМПОНЕНТОВ ==========
+        function renderCard() {
+            const container = document.getElementById('trainingContent');
+            if (!container) return;
+            
+            if (reviewWords.length === 0) {
+                renderEmptyState();
+                return;
+            }
+            
+            const current = reviewWords[currentIndex];
+            if (!current) {
+                renderEmptyState();
+                return;
+            }
+            
+            container.innerHTML = `
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Карточка ${currentIndex + 1} из ${reviewWords.length}</span>
+                        <span>${Math.round(((currentIndex + 1) / reviewWords.length) * 100)}%</span>
+                    </div>
+                    <div class="progress-bar-training">
+                        <div class="progress-fill-training" style="width: ${((currentIndex + 1) / reviewWords.length) * 100}%;"></div>
+                    </div>
+                </div>
+                
+                <div class="flashcard" onclick="flipCard()">
+                    ${!isFlipped ? `
+                        <div class="flashcard-front">
+                            <div class="flashcard-chinese">${current.word}</div>
+                            <div class="flashcard-hint">👆 Нажмите, чтобы увидеть ответ</div>
+                            <div class="flip-icon"><i class="fas fa-sync-alt"></i> перевернуть</div>
+                        </div>
+                    ` : `
+                        <div class="flashcard-back">
+                            <div class="flashcard-pinyin">${current.pinyin || '—'}</div>
+                            <div class="flashcard-translation">${current.translation || '—'}</div>
+                            <div class="flashcard-hint">${current.word}</div>
+                            <div class="flip-icon"><i class="fas fa-sync-alt"></i> перевернуть</div>
+                        </div>
+                    `}
+                    <button class="audio-card-btn" onclick="event.stopPropagation(); playWordAudio('${current.word}')">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn known" onclick="markAsKnown()">
+                        <i class="fas fa-check-circle"></i> Знаю
+                    </button>
+                    <button class="action-btn unknown" onclick="markAsUnknown()">
+                        <i class="fas fa-book-open"></i> Не знаю
+                    </button>
+                    <button class="action-btn remove" onclick="removeCurrentWord()">
+                        <i class="fas fa-trash-alt"></i> Удалить
+                    </button>
+                </div>
+                
+                <div style="text-align: center; margin-top: 1rem;">
+                    <button class="action-btn reset" onclick="resetTraining()">
+                        <i class="fas fa-trash-alt"></i> Очистить всё
+                    </button>
+                </div>
+            `;
+            
+            renderRandomWordsSection();
+        }
+
+        function renderRandomWordsSection() {
+            const container = document.getElementById('trainingContent');
+            if (!container) return;
+            
+            if (randomWords.length === 0) {
+                randomWords = getRandomWords(5);
+            }
+            
+            const randomSection = document.createElement('div');
+            randomSection.className = 'random-words-section';
+            randomSection.innerHTML = `
+                <div class="random-words-title">
+                    <span><i class="fas fa-dice-d6"></i> Случайные слова для тренировки</span>
+                    <button class="refresh-random-btn" onclick="refreshRandomWords()">
+                        <i class="fas fa-sync-alt"></i> Обновить
+                    </button>
+                </div>
+                <div class="random-words-grid" id="randomWordsGrid">
+                    ${randomWords.map(w => `
+                        <div class="random-word-card" onclick="addRandomWordToReview('${w.word}')">
+                            <div class="random-word-chinese">${w.word}</div>
+                            <div class="random-word-pinyin">${w.pinyin}</div>
+                            <div class="random-word-translation">${w.translation}</div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div style="text-align: center; margin-top: 0.75rem; font-size: 0.7rem; color: #888;">
+                    ✨ Нажмите на слово, чтобы добавить его в тренировку
+                </div>
+            `;
+            
+            const existingSection = container.querySelector('.random-words-section');
+            if (existingSection) {
+                existingSection.replaceWith(randomSection);
+            } else {
+                container.appendChild(randomSection);
+            }
+        }
+
+        function renderEmptyState() {
+            const container = document.getElementById('trainingContent');
+            if (!container) return;
+            
+            randomWords = getRandomWords(5);
+            
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <img src="images/training-cake.png" alt="Тренировка" onerror="this.src='https://placehold.co/100x100/7B001C/white?text=🍰'">
+                    </div>
+                    <div class="empty-state-title">Нет слов для тренировки</div>
+                    <div class="empty-state-text">
+                        Чтобы добавить слова в тренировку,<br>
+                        нажмите на оранжевую кнопку 📚 во время урока<br>
+                        или на кнопку + в конце урока.
+                    </div>
+                    <a href="lessons.html" class="empty-state-btn">
+                        <i class="fas fa-book"></i> Перейти к урокам
+                    </a>
+                </div>
+            `;
+            
+            renderRandomWordsSection();
+        }
+
+        function initTraining() {
+            reviewWords = loadReviewWords();
+            currentIndex = 0;
+            isFlipped = false;
+            randomWords = getRandomWords(5);
+            
+            if (reviewWords.length > 0) {
+                renderCard();
+            } else {
+                renderEmptyState();
+            }
+        }
+
+        // Делаем функции глобальными
+        window.flipCard = flipCard;
+        window.markAsKnown = markAsKnown;
+        window.markAsUnknown = markAsUnknown;
+        window.removeCurrentWord = removeCurrentWord;
+        window.resetTraining = resetTraining;
+        window.playWordAudio = playWordAudio;
+        window.refreshRandomWords = refreshRandomWords;
+        window.addRandomWordToReview = addRandomWordToReview;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = getCurrentUser();
+            if (!user) {
+                window.location.href = 'auth.html';
+                return;
+            }
+            initTraining();
+        });
+    </script>
+</body>
+</html>
