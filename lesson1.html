@@ -696,23 +696,40 @@
             }
         };
 
-        function saveLessonResults(percentCorrect) {
-            const user = getCurrentUser();
-            if (!user) return;
-            const users = getUsers();
-            const idx = users.findIndex(u => u.id === user.id);
-            if (idx !== -1) {
-                if (!users[idx].lessonResults) users[idx].lessonResults = {};
-                users[idx].lessonResults[lessonNumber] = {
-                    correct: correctCount,
-                    total: totalAttempts,
-                    percent: percentCorrect,
-                    date: new Date().toISOString()
-                };
-                saveUsers(users);
+function saveLessonResults(percentCorrect) {
+    const user = getCurrentUser();
+    if (!user) return;
+    
+    const progressData = {
+        lessonResults: {
+            [lessonNumber]: {
+                correct: correctCount,
+                total: totalAttempts,
+                percent: percentCorrect,
+                date: new Date().toISOString()
             }
         }
-
+    };
+    
+    // Используем синхронизацию с офлайн-поддержкой
+    if (typeof saveProgressWithSync === 'function') {
+        saveProgressWithSync(progressData);
+    } else {
+        // fallback если функция не определена
+        const users = getUsers();
+        const idx = users.findIndex(u => u.id === user.id);
+        if (idx !== -1) {
+            if (!users[idx].lessonResults) users[idx].lessonResults = {};
+            users[idx].lessonResults[lessonNumber] = {
+                correct: correctCount,
+                total: totalAttempts,
+                percent: percentCorrect,
+                date: new Date().toISOString()
+            };
+            saveUsers(users);
+        }
+    }
+}
         function updateProgress() {
             const percent = (currentIndex / exercises.length) * 100;
             const fill = document.getElementById('progressFill');
@@ -995,22 +1012,48 @@
                     const users = getUsers();
                     const idx = users.findIndex(u => u.id === user.id);
                     if (idx !== -1) {
-                        if (!users[idx].completedLessons) users[idx].completedLessons = [];
-                        if (!users[idx].completedLessons.includes(lessonNumber)) users[idx].completedLessons.push(lessonNumber);
-                        if (!users[idx].learnedWords) users[idx].learnedWords = [];
-                        lessonWords.forEach(w => { if (!users[idx].learnedWords.includes(w.chinese)) users[idx].learnedWords.push(w.chinese); });
-                        if (!users[idx].lessonResults) users[idx].lessonResults = {};
-                        users[idx].lessonResults[lessonNumber] = { correct: correctCount, total: totalAttempts, percent: percentCorrect, date: new Date().toISOString() };
-                        if (!users[idx].dailyProgress) users[idx].dailyProgress = {};
-                        const today = new Date().toISOString().split('T')[0];
-                        if (!users[idx].dailyProgress[today]) users[idx].dailyProgress[today] = { newWords: 0, correctPercent: 0 };
-                        users[idx].dailyProgress[today].correctPercent = percentCorrect;
-                        saveUsers(users);
-                        const { password: _, ...updatedUser } = users[idx];
-                        setCurrentUser(updatedUser);
+                        // Подготавливаем данные для синхронизации
+                        const progressData = {
+                            completedLessons: [lessonNumber],
+                            learnedWords: lessonWords.map(w => w.chinese || w),
+                            lessonResults: {
+                                [lessonNumber]: {
+                                    correct: correctCount,
+                                    total: totalAttempts,
+                                    percent: percentCorrect,
+                                    date: new Date().toISOString()
+                                }
+                            },
+                            dailyProgress: {
+                                [new Date().toISOString().split('T')[0]]: {
+                                    newWords: lessonWords.length,
+                                    correctPercent: percentCorrect
+                                }
+                            }
+                        };
+                        
+                        // Пытаемся сохранить с синхронизацией (офлайн-поддержка)
+                        if (typeof saveProgressWithSync === 'function') {
+                            saveProgressWithSync(progressData);
+                        } else {
+                            // fallback если функция не определена
+                            if (!users[idx].completedLessons) users[idx].completedLessons = [];
+                            if (!users[idx].completedLessons.includes(lessonNumber)) users[idx].completedLessons.push(lessonNumber);
+                            if (!users[idx].learnedWords) users[idx].learnedWords = [];
+                            lessonWords.forEach(w => { if (!users[idx].learnedWords.includes(w.chinese || w)) users[idx].learnedWords.push(w.chinese || w); });
+                            if (!users[idx].lessonResults) users[idx].lessonResults = {};
+                            users[idx].lessonResults[lessonNumber] = { correct: correctCount, total: totalAttempts, percent: percentCorrect, date: new Date().toISOString() };
+                            if (!users[idx].dailyProgress) users[idx].dailyProgress = {};
+                            const today = new Date().toISOString().split('T')[0];
+                            if (!users[idx].dailyProgress[today]) users[idx].dailyProgress[today] = { newWords: 0, correctPercent: 0 };
+                            users[idx].dailyProgress[today].correctPercent = percentCorrect;
+                            saveUsers(users);
+                            const { password: _, ...updatedUser } = users[idx];
+                            setCurrentUser(updatedUser);
+                        }
                     }
                 }
-                window.location.href = 'lessons.html';
+                                window.location.href = 'lessons.html';
             };
         }
 
@@ -1048,6 +1091,11 @@
             updateProgress();
             renderCurrent();
             setupMenuProtection();
+
+            // Проверяем несинхронизированный прогресс при загрузке
+            if (typeof syncOfflineProgress === 'function') {
+                syncOfflineProgress();
+            }
 
             const confirmBtn = document.getElementById('confirmExitBtn');
             const cancelBtn = document.getElementById('cancelExitBtn');

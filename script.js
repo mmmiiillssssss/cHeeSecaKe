@@ -1,3 +1,126 @@
+// ========== ОФЛАЙН-СИНХРОНИЗАЦИЯ ПРОГРЕССА ==========
+
+// Ключ для временного хранения прогресса
+const OFFLINE_PROGRESS_KEY = 'cheesecake_offline_progress';
+
+// Сохранить прогресс (автоматически определяет, есть ли интернет)
+function saveProgressWithSync(progressData) {
+    if (navigator.onLine) {
+        // Есть интернет — сохраняем сразу
+        return saveProgressDirectly(progressData);
+    } else {
+        // Нет интернета — сохраняем во временное хранилище
+        return saveProgressToOffline(progressData);
+    }
+}
+
+// Сохранить прогресс напрямую в основное хранилище
+function saveProgressDirectly(progressData) {
+    try {
+        const user = getCurrentUser();
+        if (!user) return false;
+        
+        const users = getUsers();
+        const idx = users.findIndex(u => u.id === user.id);
+        if (idx !== -1) {
+            if (progressData.completedLessons) {
+                users[idx].completedLessons = [...new Set([...(users[idx].completedLessons || []), ...progressData.completedLessons])];
+            }
+            if (progressData.learnedWords) {
+                users[idx].learnedWords = [...new Set([...(users[idx].learnedWords || []), ...progressData.learnedWords])];
+            }
+            if (progressData.lessonResults) {
+                users[idx].lessonResults = { ...(users[idx].lessonResults || {}), ...progressData.lessonResults };
+            }
+            if (progressData.dailyProgress) {
+                users[idx].dailyProgress = { ...(users[idx].dailyProgress || {}), ...progressData.dailyProgress };
+            }
+            saveUsers(users);
+            
+            // Обновляем текущего пользователя
+            const { password: _, ...updatedUser } = users[idx];
+            setCurrentUser(updatedUser);
+            return true;
+        }
+    } catch (e) {
+        console.error('Ошибка сохранения:', e);
+    }
+    return false;
+}
+
+// Сохранить прогресс во временное хранилище (офлайн)
+function saveProgressToOffline(progressData) {
+    try {
+        let offlineProgress = JSON.parse(localStorage.getItem(OFFLINE_PROGRESS_KEY) || '[]');
+        offlineProgress.push({
+            ...progressData,
+            timestamp: Date.now()
+        });
+        localStorage.setItem(OFFLINE_PROGRESS_KEY, JSON.stringify(offlineProgress));
+        console.log('Прогресс сохранён офлайн, будет синхронизирован при появлении интернета');
+        return true;
+    } catch (e) {
+        console.error('Ошибка сохранения офлайн-прогресса:', e);
+        return false;
+    }
+}
+
+// Синхронизировать все офлайн-сохранения при появлении интернета
+async function syncOfflineProgress() {
+    const offlineProgress = JSON.parse(localStorage.getItem(OFFLINE_PROGRESS_KEY) || '[]');
+    if (offlineProgress.length === 0) return;
+    
+    console.log(`Синхронизация ${offlineProgress.length} офлайн-сохранений...`);
+    
+    let successCount = 0;
+    for (const progress of offlineProgress) {
+        if (saveProgressDirectly(progress)) {
+            successCount++;
+        }
+    }
+    
+    // Очищаем синхронизированные
+    localStorage.setItem(OFFLINE_PROGRESS_KEY, JSON.stringify([]));
+    
+    showSyncToast(`✅ Синхронизировано ${successCount} из ${offlineProgress.length} сохранений`);
+    
+    // Обновляем интерфейс, если нужно
+    if (window.location.pathname.includes('profile.html')) {
+        renderProfile();
+    }
+}
+
+// Показать уведомление о синхронизации
+function showSyncToast(message) {
+    const toast = document.createElement('div');
+    toast.textContent = message;
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 40px;
+        font-size: 14px;
+        z-index: 10000;
+        animation: fadeOut 3s forwards;
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
+// Слушаем событие появления интернета
+window.addEventListener('online', () => {
+    console.log('Интернет появился! Синхронизируем прогресс...');
+    syncOfflineProgress();
+});
+
+// При загрузке страницы проверяем, есть ли несинхронизированный прогресс
+if (navigator.onLine) {
+    syncOfflineProgress();
+}
 // ========== НАДЁЖНОЕ ХРАНЕНИЕ ДАННЫХ ==========
 function safeSaveUsers(users) {
     try {
@@ -502,3 +625,4 @@ function checkMobileHeader() {
 }
 checkMobileHeader();
 window.addEventListener('resize', checkMobileHeader);
+

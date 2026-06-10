@@ -383,6 +383,15 @@
             background: #7B001C;
             color: white;
         }
+        .profile-action-btn.sync {
+            background: white;
+            border: 1px solid #4CAF50;
+            color: #4CAF50;
+        }
+        .profile-action-btn.sync:hover {
+            background: #4CAF50;
+            color: white;
+        }
 
         @media (max-width: 768px) {
             .profile-layout {
@@ -449,34 +458,44 @@
 
     <script src="script.js"></script>
     <script>
-        // Список всех файлов для загрузки в офлайн-режим
-        const OFFLINE_FILES = [
-            // HTML страницы
-            '/', '/index.html', '/auth.html', '/lessons.html', '/profile.html', '/training.html', '/letters.html', '/about.html',
-            '/lesson1.html', '/lesson2.html', '/lesson3.html',
-            // CSS/JS
-            '/style.css', '/script.js',
-            // Изображения
-            '/images/logo.png', '/images/numbers-cake.png', '/images/hello-cake.png', '/images/training-cake.png',
-            '/images/learn-pinyin.png', '/images/old-cake.png', '/images/color-cakes.png', '/images/cake-cat.png',
+        // Динамическое получение списка файлов для загрузки
+        function getOfflineFilesList() {
+            // Базовые файлы
+            const baseFiles = [
+                '/', '/index.html', '/auth.html', '/lessons.html', '/profile.html', '/training.html', '/letters.html', '/about.html',
+                '/style.css', '/script.js',
+                '/images/logo.png', '/images/numbers-cake.png', '/images/hello-cake.png', '/images/training-cake.png',
+                '/images/learn-pinyin.png', '/images/old-cake.png', '/images/color-cakes.png', '/images/cake-cat.png'
+            ];
+            
+            // Все существующие уроки (динамически)
+            const lessonFiles = [];
+            for (let i = 1; i <= 30; i++) {
+                lessonFiles.push(`/lesson${i}.html`);
+            }
+            
             // Аудиофайлы
-            '/audio/ma0.mp3', '/audio/ma1.mp3', '/audio/ma2.mp3', '/audio/ma3.mp3', '/audio/ma4.mp3',
-            '/audio/ba.mp3', '/audio/baba.mp3', '/audio/c.mp3', '/audio/d.mp3', '/audio/didi.mp3',
-            '/audio/duibuqi.mp3', '/audio/e.mp3', '/audio/er.mp3', '/audio/erzi.mp3', '/audio/error.mp3',
-            '/audio/f.mp3', '/audio/g.mp3', '/audio/gege.mp3', '/audio/h.mp3', '/audio/j.mp3',
-            '/audio/jia.mp3', '/audio/jiejie.mp3', '/audio/jiu.mp3', '/audio/k.mp3', '/audio/l.mp3',
-            '/audio/liu.mp3', '/audio/m.mp3', '/audio/ma.mp3', '/audio/mama.mp3', '/audio/meimei.mp3',
-            '/audio/n.mp3', '/audio/nainai.mp3', '/audio/ni.mp3', '/audio/nidenuerjisuile.mp3',
-            '/audio/nihaowojiaoanna.mp3', '/audio/nihao.mp3', '/audio/nimenjiayoujikouren.mp3',
-            '/audio/nuer.mp3', '/audio/p.mp3', '/audio/qi.mp3', '/audio/r.mp3', '/audio/s.mp3',
-            '/audio/san.mp3', '/audio/shi.mp3', '/audio/si.mp3', '/audio/success.mp3', '/audio/t.mp3',
-            '/audio/ta.mp3', '/audio/w.mp3', '/audio/wo.mp3', '/audio/woaiwojiairen.mp3',
-            '/audio/wojiaoanna.mp3', '/audio/wojiayousankouren.mp3', '/audio/woyouliangge.mp3',
-            '/audio/woyousangepingguo.mp3', '/audio/woyouyige.mp3', '/audio/woyouyigegeheyigemeimei.mp3',
-            '/audio/wu.mp3', '/audio/x.mp3', '/audio/xiexie.mp3', '/audio/y.mp3', '/audio/yeye.mp3',
-            '/audio/yeyehenainai.mp3', '/audio/yi.mp3', '/audio/you.mp3', '/audio/z.mp3',
-            '/audio/zaijian.mp3', '/audio/zhegeduoshaoqian.mp3', '/audio/zheshiwomama.mp3'
-        ];
+            const audioFiles = [
+                '/audio/ma0.mp3', '/audio/ma1.mp3', '/audio/ma2.mp3', '/audio/ma3.mp3', '/audio/ma4.mp3',
+                '/audio/ba.mp3', '/audio/baba.mp3', '/audio/c.mp3', '/audio/d.mp3', '/audio/didi.mp3',
+                '/audio/duibuqi.mp3', '/audio/e.mp3', '/audio/er.mp3', '/audio/erzi.mp3', '/audio/error.mp3',
+                '/audio/f.mp3', '/audio/g.mp3', '/audio/gege.mp3', '/audio/h.mp3', '/audio/j.mp3',
+                '/audio/jia.mp3', '/audio/jiejie.mp3', '/audio/jiu.mp3', '/audio/k.mp3', '/audio/l.mp3',
+                '/audio/liu.mp3', '/audio/m.mp3', '/audio/ma.mp3', '/audio/mama.mp3', '/audio/meimei.mp3',
+                '/audio/n.mp3', '/audio/nainai.mp3', '/audio/ni.mp3', '/audio/nidenuerjisuile.mp3',
+                '/audio/nihaowojiaoanna.mp3', '/audio/nihao.mp3', '/audio/nimenjiayoujikouren.mp3',
+                '/audio/nuer.mp3', '/audio/p.mp3', '/audio/qi.mp3', '/audio/r.mp3', '/audio/s.mp3',
+                '/audio/san.mp3', '/audio/shi.mp3', '/audio/si.mp3', '/audio/success.mp3', '/audio/t.mp3',
+                '/audio/ta.mp3', '/audio/w.mp3', '/audio/wo.mp3', '/audio/woaiwojiairen.mp3',
+                '/audio/wojiaoanna.mp3', '/audio/wojiayousankouren.mp3', '/audio/woyouliangge.mp3',
+                '/audio/woyousangepingguo.mp3', '/audio/woyouyige.mp3', '/audio/woyouyigegeheyigemeimei.mp3',
+                '/audio/wu.mp3', '/audio/x.mp3', '/audio/xiexie.mp3', '/audio/y.mp3', '/audio/yeye.mp3',
+                '/audio/yeyehenainai.mp3', '/audio/yi.mp3', '/audio/you.mp3', '/audio/z.mp3',
+                '/audio/zaijian.mp3', '/audio/zhegeduoshaoqian.mp3', '/audio/zheshiwomama.mp3'
+            ];
+            
+            return [...baseFiles, ...lessonFiles, ...audioFiles];
+        }
 
         let isDownloading = false;
 
@@ -571,9 +590,9 @@
                 }).join('');
             }
             
-            // Аватар
+            // Аватар (ИСПРАВЛЕНО: правильно отображаем аватар)
             const avatarHtml = user.avatar 
-                ? `<img src="${user.avatar}" alt="avatar">` 
+                ? `<img src="${user.avatar}" alt="avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">` 
                 : `<div class="avatar-placeholder"><i class="fas fa-user-circle"></i></div>`;
             
             const container = document.getElementById('profileContent');
@@ -639,6 +658,9 @@
                     </div>
                     
                     <div class="action-buttons-profile">
+                        <button class="profile-action-btn sync" id="syncProgressBtn">
+                            <i class="fas fa-sync-alt"></i> Синхронизировать прогресс
+                        </button>
                         <button class="profile-action-btn reset" id="resetProgressBtn">
                             <i class="fas fa-trash-alt"></i> Сбросить прогресс
                         </button>
@@ -689,7 +711,7 @@
                 </div>
             `;
             
-            // Обработчики аватара
+            // ========== ОБРАБОТЧИК АВАТАРА (ИСПРАВЛЕНО) ==========
             const avatarUpload = document.getElementById('avatarUpload');
             if (avatarUpload) {
                 avatarUpload.addEventListener('change', (e) => {
@@ -704,7 +726,7 @@
                                 saveUsers(usersList);
                                 const { password: _, ...updatedUser } = usersList[idx];
                                 setCurrentUser(updatedUser);
-                                renderProfile();
+                                renderProfile(); // обновляем страницу
                             }
                         };
                         reader.readAsDataURL(file);
@@ -712,10 +734,27 @@
                 });
             }
             
-            // Инициализация офлайн-загрузки
+            // ========== ИНИЦИАЛИЗАЦИЯ ОФЛАЙН-ЗАГРУЗКИ ==========
             initOfflineDownload();
             
-            // Сброс прогресса
+            // ========== КНОПКА СИНХРОНИЗАЦИИ ==========
+            const syncBtn = document.getElementById('syncProgressBtn');
+            if (syncBtn) {
+                syncBtn.addEventListener('click', async () => {
+                    syncBtn.disabled = true;
+                    syncBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Синхронизация...';
+                    if (typeof syncOfflineProgress === 'function') {
+                        await syncOfflineProgress();
+                    }
+                    syncBtn.innerHTML = '<i class="fas fa-check"></i> Синхронизировано';
+                    setTimeout(() => {
+                        syncBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Синхронизировать прогресс';
+                        syncBtn.disabled = false;
+                    }, 2000);
+                });
+            }
+            
+            // ========== СБРОС ПРОГРЕССА ==========
             const resetBtn = document.getElementById('resetProgressBtn');
             if (resetBtn) {
                 resetBtn.addEventListener('click', () => {
@@ -738,7 +777,7 @@
                 });
             }
             
-            // Выход
+            // ========== ВЫХОД ==========
             const logoutBtn = document.getElementById('logoutBtn');
             if (logoutBtn) {
                 logoutBtn.addEventListener('click', () => {
@@ -748,13 +787,14 @@
             }
         }
         
-        // Функции для офлайн-загрузки
+        // ========== ФУНКЦИИ ДЛЯ ОФЛАЙН-ЗАГРУЗКИ ==========
         async function downloadAllFiles(onProgress, onComplete, onError) {
             const cache = await caches.open('cheesecake-v5');
+            const files = getOfflineFilesList();
             let downloaded = 0;
-            const total = OFFLINE_FILES.length;
+            const total = files.length;
             
-            for (const file of OFFLINE_FILES) {
+            for (const file of files) {
                 try {
                     const response = await fetch(file);
                     if (response.ok) {
@@ -777,7 +817,6 @@
             const progressCircleFill = document.getElementById('progressCircleFill');
             const downloadStatus = document.getElementById('downloadStatus');
             const successIcon = document.getElementById('successIcon');
-            const progressCircleContainer = document.getElementById('progressCircleContainer');
             
             if (!downloadBtn) return;
             
@@ -805,22 +844,6 @@
                     downloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> Всё загружено';
                 }
                 localStorage.setItem('offline_files_downloaded', 'true');
-            }
-            
-            function resetProgress() {
-                progressPercent.style.display = 'block';
-                if (successIcon) successIcon.style.display = 'none';
-                progressPercent.textContent = '0%';
-                if (progressCircleFill) {
-                    progressCircleFill.style.strokeDashoffset = circumference;
-                }
-                if (downloadStatus) {
-                    downloadStatus.textContent = '';
-                }
-                if (downloadBtn) {
-                    downloadBtn.disabled = false;
-                    downloadBtn.innerHTML = '<i class="fas fa-download"></i> Загрузить всё для офлайн-режима';
-                }
             }
             
             // Проверяем, были ли уже загружены файлы
