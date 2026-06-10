@@ -246,6 +246,104 @@
             color: #4CAF50;
         }
 
+        /* Блок загрузки офлайн-режима */
+        .offline-download-section {
+            background: white;
+            border-radius: 24px;
+            padding: 1.5rem;
+            border: 1px solid #eaeaea;
+            margin-top: 1rem;
+        }
+        .offline-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #7B001C;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .download-container {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .progress-circle-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            flex-shrink: 0;
+        }
+        .progress-circle-svg {
+            transform: rotate(-90deg);
+            width: 100%;
+            height: 100%;
+        }
+        .progress-circle-bg {
+            stroke: #e0e0e0;
+            stroke-width: 4;
+            fill: none;
+        }
+        .progress-circle-fill {
+            stroke: #7B001C;
+            stroke-width: 4;
+            fill: none;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.3s ease;
+        }
+        .progress-percent {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #7B001C;
+        }
+        .success-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+        }
+        .download-info {
+            flex: 1;
+        }
+        .download-btn {
+            background: #7B001C;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .download-btn:hover {
+            background: #480607;
+            transform: translateY(-2px);
+        }
+        .download-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .download-status {
+            font-size: 0.75rem;
+            color: #6c6c6c;
+            margin-top: 0.5rem;
+        }
+        .download-completed {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
         /* Кнопки */
         .action-buttons-profile {
             display: flex;
@@ -300,6 +398,10 @@
             .results-table {
                 font-size: 0.8rem;
             }
+            .download-container {
+                flex-direction: column;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -347,6 +449,37 @@
 
     <script src="script.js"></script>
     <script>
+        // Список всех файлов для загрузки в офлайн-режим
+        const OFFLINE_FILES = [
+            // HTML страницы
+            '/', '/index.html', '/auth.html', '/lessons.html', '/profile.html', '/training.html', '/letters.html', '/about.html',
+            '/lesson1.html', '/lesson2.html', '/lesson3.html',
+            // CSS/JS
+            '/style.css', '/script.js',
+            // Изображения
+            '/images/logo.png', '/images/numbers-cake.png', '/images/hello-cake.png', '/images/training-cake.png',
+            '/images/learn-pinyin.png', '/images/old-cake.png', '/images/color-cakes.png', '/images/cake-cat.png',
+            // Аудиофайлы
+            '/audio/ma0.mp3', '/audio/ma1.mp3', '/audio/ma2.mp3', '/audio/ma3.mp3', '/audio/ma4.mp3',
+            '/audio/ba.mp3', '/audio/baba.mp3', '/audio/c.mp3', '/audio/d.mp3', '/audio/didi.mp3',
+            '/audio/duibuqi.mp3', '/audio/e.mp3', '/audio/er.mp3', '/audio/erzi.mp3', '/audio/error.mp3',
+            '/audio/f.mp3', '/audio/g.mp3', '/audio/gege.mp3', '/audio/h.mp3', '/audio/j.mp3',
+            '/audio/jia.mp3', '/audio/jiejie.mp3', '/audio/jiu.mp3', '/audio/k.mp3', '/audio/l.mp3',
+            '/audio/liu.mp3', '/audio/m.mp3', '/audio/ma.mp3', '/audio/mama.mp3', '/audio/meimei.mp3',
+            '/audio/n.mp3', '/audio/nainai.mp3', '/audio/ni.mp3', '/audio/nidenuerjisuile.mp3',
+            '/audio/nihaowojiaoanna.mp3', '/audio/nihao.mp3', '/audio/nimenjiayoujikouren.mp3',
+            '/audio/nuer.mp3', '/audio/p.mp3', '/audio/qi.mp3', '/audio/r.mp3', '/audio/s.mp3',
+            '/audio/san.mp3', '/audio/shi.mp3', '/audio/si.mp3', '/audio/success.mp3', '/audio/t.mp3',
+            '/audio/ta.mp3', '/audio/w.mp3', '/audio/wo.mp3', '/audio/woaiwojiairen.mp3',
+            '/audio/wojiaoanna.mp3', '/audio/wojiayousankouren.mp3', '/audio/woyouliangge.mp3',
+            '/audio/woyousangepingguo.mp3', '/audio/woyouyige.mp3', '/audio/woyouyigegeheyigemeimei.mp3',
+            '/audio/wu.mp3', '/audio/x.mp3', '/audio/xiexie.mp3', '/audio/y.mp3', '/audio/yeye.mp3',
+            '/audio/yeyehenainai.mp3', '/audio/yi.mp3', '/audio/you.mp3', '/audio/z.mp3',
+            '/audio/zaijian.mp3', '/audio/zhegeduoshaoqian.mp3', '/audio/zheshiwomama.mp3'
+        ];
+
+        let isDownloading = false;
+
         function renderProfile() {
             const user = getCurrentUser();
             if (!user) {
@@ -392,7 +525,7 @@
             const dailyProgress = user.dailyProgress || {};
             const daysArray = Object.entries(dailyProgress)
                 .sort((a, b) => new Date(a[0]) - new Date(b[0]))
-                .slice(-7); // последние 7 дней
+                .slice(-7);
             
             // Таблица результатов уроков
             const resultsArray = [];
@@ -404,7 +537,6 @@
             }
             resultsArray.sort((a, b) => a.id - b.id);
             
-            // HTML для результатов уроков
             let resultsHtml = '';
             if (resultsArray.length === 0) {
                 resultsHtml = '<tr><td colspan="4" style="text-align: center; padding: 2rem;">Пока нет пройденных уроков</td></tr>';
@@ -423,7 +555,6 @@
                 `).join('');
             }
             
-            // HTML для динамики по дням
             let daysHtml = '';
             if (daysArray.length === 0) {
                 daysHtml = '<div style="text-align: center; padding: 1rem; color: #999;">Пока нет данных. Проходите уроки, чтобы видеть прогресс!</div>';
@@ -483,6 +614,30 @@
                         </div>
                     </div>
                     
+                    <!-- Блок загрузки офлайн-режима -->
+                    <div class="offline-download-section">
+                        <div class="offline-title">
+                            <i class="fas fa-download"></i> Офлайн-режим
+                        </div>
+                        <div class="download-container">
+                            <div class="progress-circle-container" id="progressCircleContainer">
+                                <svg class="progress-circle-svg" width="80" height="80" viewBox="0 0 80 80">
+                                    <circle class="progress-circle-bg" cx="40" cy="40" r="34"></circle>
+                                    <circle class="progress-circle-fill" id="progressCircleFill" cx="40" cy="40" r="34"
+                                            stroke-dasharray="213.628" stroke-dashoffset="213.628"></circle>
+                                </svg>
+                                <span id="progressPercent" class="progress-percent">0%</span>
+                                <span id="successIcon" class="success-icon" style="display: none;">✅</span>
+                            </div>
+                            <div class="download-info">
+                                <button id="downloadOfflineBtn" class="download-btn">
+                                    <i class="fas fa-download"></i> Загрузить всё для офлайн-режима
+                                </button>
+                                <p id="downloadStatus" class="download-status"></p>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="action-buttons-profile">
                         <button class="profile-action-btn reset" id="resetProgressBtn">
                             <i class="fas fa-trash-alt"></i> Сбросить прогресс
@@ -495,7 +650,6 @@
                 
                 <!-- Правая колонка -->
                 <div class="profile-right">
-                    <!-- Карточки статистики -->
                     <div class="stats-cards">
                         <div class="stat-card-profile">
                             <div class="stat-icon"><i class="fas fa-book"></i></div>
@@ -514,7 +668,6 @@
                         </div>
                     </div>
                     
-                    <!-- Результаты уроков -->
                     <div class="results-section">
                         <div class="section-title">
                             <i class="fas fa-clipboard-list"></i> Результаты уроков
@@ -523,25 +676,20 @@
                             <thead>
                                 <tr><th>Урок</th><th>Правильно</th><th>%</th><th>Прогресс</th></tr>
                             </thead>
-                            <tbody>
-                                ${resultsHtml}
-                            </tbody>
+                            <tbody>${resultsHtml}</tbody>
                         </table>
                     </div>
                     
-                    <!-- Динамика прогресса по дням -->
                     <div class="progress-days">
                         <div class="section-title">
                             <i class="fas fa-calendar-week"></i> Динамика прогресса (последние 7 дней)
                         </div>
-                        <div class="days-grid">
-                            ${daysHtml}
-                        </div>
+                        <div class="days-grid">${daysHtml}</div>
                     </div>
                 </div>
             `;
             
-            // Обработчики
+            // Обработчики аватара
             const avatarUpload = document.getElementById('avatarUpload');
             if (avatarUpload) {
                 avatarUpload.addEventListener('change', (e) => {
@@ -564,6 +712,10 @@
                 });
             }
             
+            // Инициализация офлайн-загрузки
+            initOfflineDownload();
+            
+            // Сброс прогресса
             const resetBtn = document.getElementById('resetProgressBtn');
             if (resetBtn) {
                 resetBtn.addEventListener('click', () => {
@@ -586,6 +738,7 @@
                 });
             }
             
+            // Выход
             const logoutBtn = document.getElementById('logoutBtn');
             if (logoutBtn) {
                 logoutBtn.addEventListener('click', () => {
@@ -593,6 +746,111 @@
                     window.location.href = 'auth.html';
                 });
             }
+        }
+        
+        // Функции для офлайн-загрузки
+        async function downloadAllFiles(onProgress, onComplete, onError) {
+            const cache = await caches.open('cheesecake-v5');
+            let downloaded = 0;
+            const total = OFFLINE_FILES.length;
+            
+            for (const file of OFFLINE_FILES) {
+                try {
+                    const response = await fetch(file);
+                    if (response.ok) {
+                        await cache.put(file, response);
+                    }
+                    downloaded++;
+                    const percent = Math.round((downloaded / total) * 100);
+                    if (onProgress) onProgress(percent, downloaded, total);
+                } catch (e) {
+                    console.error('Ошибка загрузки:', file, e);
+                    if (onError) onError(file, e);
+                }
+            }
+            if (onComplete) onComplete();
+        }
+        
+        function initOfflineDownload() {
+            const downloadBtn = document.getElementById('downloadOfflineBtn');
+            const progressPercent = document.getElementById('progressPercent');
+            const progressCircleFill = document.getElementById('progressCircleFill');
+            const downloadStatus = document.getElementById('downloadStatus');
+            const successIcon = document.getElementById('successIcon');
+            const progressCircleContainer = document.getElementById('progressCircleContainer');
+            
+            if (!downloadBtn) return;
+            
+            const circumference = 213.628;
+            
+            function updateProgress(percent, downloaded, total) {
+                progressPercent.textContent = `${percent}%`;
+                const offset = circumference - (percent / 100) * circumference;
+                if (progressCircleFill) {
+                    progressCircleFill.style.strokeDashoffset = offset;
+                }
+                if (downloadStatus) {
+                    downloadStatus.textContent = `Загружено ${downloaded} из ${total} файлов (${percent}%)`;
+                }
+            }
+            
+            function showSuccess() {
+                progressPercent.style.display = 'none';
+                if (successIcon) successIcon.style.display = 'block';
+                if (downloadStatus) {
+                    downloadStatus.innerHTML = '<span class="download-completed">✅ Все файлы успешно загружены! Приложение полностью готово к офлайн-работе.</span>';
+                }
+                if (downloadBtn) {
+                    downloadBtn.disabled = true;
+                    downloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> Всё загружено';
+                }
+                localStorage.setItem('offline_files_downloaded', 'true');
+            }
+            
+            function resetProgress() {
+                progressPercent.style.display = 'block';
+                if (successIcon) successIcon.style.display = 'none';
+                progressPercent.textContent = '0%';
+                if (progressCircleFill) {
+                    progressCircleFill.style.strokeDashoffset = circumference;
+                }
+                if (downloadStatus) {
+                    downloadStatus.textContent = '';
+                }
+                if (downloadBtn) {
+                    downloadBtn.disabled = false;
+                    downloadBtn.innerHTML = '<i class="fas fa-download"></i> Загрузить всё для офлайн-режима';
+                }
+            }
+            
+            // Проверяем, были ли уже загружены файлы
+            const alreadyDownloaded = localStorage.getItem('offline_files_downloaded');
+            if (alreadyDownloaded === 'true') {
+                showSuccess();
+            }
+            
+            downloadBtn.addEventListener('click', async () => {
+                if (isDownloading) return;
+                isDownloading = true;
+                downloadBtn.disabled = true;
+                downloadBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Загрузка...';
+                downloadStatus.textContent = 'Начинаем загрузку...';
+                
+                await downloadAllFiles(
+                    (percent, downloaded, total) => updateProgress(percent, downloaded, total),
+                    () => {
+                        isDownloading = false;
+                        showSuccess();
+                    },
+                    (file, error) => {
+                        console.error('Ошибка:', file);
+                        downloadStatus.textContent = `Ошибка при загрузке ${file}. Проверьте интернет и попробуйте снова.`;
+                        downloadBtn.disabled = false;
+                        downloadBtn.innerHTML = '<i class="fas fa-download"></i> Попробовать снова';
+                        isDownloading = false;
+                    }
+                );
+            });
         }
         
         document.addEventListener('DOMContentLoaded', () => {
