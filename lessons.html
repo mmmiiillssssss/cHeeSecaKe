@@ -291,6 +291,25 @@ function showFirstLaunchHint() {
     
     // Показываем подсказку при первом запуске
     showFirstLaunchHint();
+    // Автоматическая синхронизация офлайн-прогресса при загрузке
+    function syncOnLoad() {
+        const offlineProgress = JSON.parse(localStorage.getItem('cheesecake_offline_progress') || '[]');
+        if (offlineProgress.length > 0 && typeof syncOfflineProgress === 'function') {
+            console.log('Найден несинхронизированный прогресс, синхронизируем...');
+            syncOfflineProgress();
+        }
+    }
+    syncOnLoad();  
+    
+    // Синхронизация при возврате на вкладку (из другого окна)
+    window.addEventListener('focus', () => {
+        const offlineProgress = JSON.parse(localStorage.getItem('cheesecake_offline_progress') || '[]');
+        if (offlineProgress.length > 0 && typeof syncOfflineProgress === 'function') {
+            console.log('Фокус на окне, синхронизируем прогресс...');
+            syncOfflineProgress();
+            renderLessons();
+        }
+    });
 });
     </script>
 
