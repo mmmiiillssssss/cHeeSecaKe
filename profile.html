@@ -696,6 +696,17 @@
                 </div>
                 
                 <!-- Правая колонка -->
+                 <!-- Блок предупреждения об офлайн-синхронизации -->
+                <div class="offline-warning-section">
+                    <div class="offline-warning-title">
+                        <i class="fas fa-wifi"></i> Офлайн-режим
+                    </div>
+                    <div class="offline-warning-content">
+                        <p>📱 Если вы проходите уроки <strong>без интернета</strong>, ваш прогресс сохраняется локально.</p>
+                        <p>🔄 Чтобы разблокировать следующий урок и синхронизировать прогресс с сервером, <strong>нажмите на кнопку "Синхронизировать прогресс"</strong></p>
+                        <p>✅ После синхронизации все пройденные уроки будут отмечены как завершённые.</p>
+                    </div>
+                </div>
                 <div class="profile-right">
                     <div class="stats-cards">
                         <div class="stat-card-profile">
@@ -734,17 +745,7 @@
                         <div class="days-grid">${daysHtml}</div>
                     </div>
                 </div>
-                <!-- Блок предупреждения об офлайн-синхронизации -->
-<div class="offline-warning-section">
-    <div class="offline-warning-title">
-        <i class="fas fa-wifi"></i> Офлайн-режим
-    </div>
-    <div class="offline-warning-content">
-        <p>📱 Если вы проходите уроки <strong>без интернета</strong>, ваш прогресс сохраняется локально.</p>
-        <p>🔄 Чтобы разблокировать следующий урок и синхронизировать прогресс с сервером, <strong>нажмите на кнопку "Синхронизировать прогресс"</strong> при появлении интернета.</p>
-        <p>✅ После синхронизации все пройденные уроки будут отмечены как завершённые.</p>
-    </div>
-</div>
+               
             `;
             
             // ========== ОБРАБОТЧИК АВАТАРА (ИСПРАВЛЕНО) ==========
@@ -847,28 +848,99 @@
             if (onComplete) onComplete();
         }
         
-        function initOfflineDownload() {
-            const downloadBtn = document.getElementById('downloadOfflineBtn');
-            const progressPercent = document.getElementById('progressPercent');
-            const progressCircleFill = document.getElementById('progressCircleFill');
-            const downloadStatus = document.getElementById('downloadStatus');
-            const successIcon = document.getElementById('successIcon');
-            
-            if (!downloadBtn) return;
-            
-            const circumference = 213.628;
-            
-            function updateProgress(percent, downloaded, total) {
-                progressPercent.textContent = `${percent}%`;
-                const offset = circumference - (percent / 100) * circumference;
-                if (progressCircleFill) {
-                    progressCircleFill.style.strokeDashoffset = offset;
-                }
-                if (downloadStatus) {
-                    downloadStatus.textContent = `Загружено ${downloaded} из ${total} файлов (${percent}%)`;
-                }
+function initOfflineDownload() {
+    const downloadBtn = document.getElementById('downloadOfflineBtn');
+    const progressPercent = document.getElementById('progressPercent');
+    const progressCircleFill = document.getElementById('progressCircleFill');
+    const downloadStatus = document.getElementById('downloadStatus');
+    const successIcon = document.getElementById('successIcon');
+    
+    if (!downloadBtn) return;
+    
+    const circumference = 213.628;
+    
+    function updateProgress(percent, downloaded, total) {
+        progressPercent.textContent = `${percent}%`;
+        const offset = circumference - (percent / 100) * circumference;
+        if (progressCircleFill) {
+            progressCircleFill.style.strokeDashoffset = offset;
+        }
+        if (downloadStatus) {
+            downloadStatus.textContent = `Загружено ${downloaded} из ${total} файлов (${percent}%)`;
+        }
+    }
+    
+    function showSuccess() {
+        progressPercent.style.display = 'none';
+        if (successIcon) successIcon.style.display = 'block';
+        if (downloadStatus) {
+            downloadStatus.innerHTML = '<span class="download-completed">✅ Все файлы успешно загружены! Приложение полностью готово к офлайн-работе.</span>';
+        }
+        if (downloadBtn) {
+            downloadBtn.disabled = true;
+            downloadBtn.innerHTML = '<i class="fas fa-check-circle"></i> Всё загружено';
+        }
+        localStorage.setItem('offline_files_downloaded', 'true');
+    }
+    
+    function resetProgress() {
+        progressPercent.style.display = 'block';
+        if (successIcon) successIcon.style.display = 'none';
+        progressPercent.textContent = '0%';
+        if (progressCircleFill) {
+            progressCircleFill.style.strokeDashoffset = circumference;
+        }
+        if (downloadStatus) {
+            downloadStatus.textContent = '';
+        }
+        if (downloadBtn) {
+            downloadBtn.disabled = false;
+            downloadBtn.innerHTML = '<i class="fas fa-download"></i> Загрузить всё для офлайн-режима';
+        }
+    }
+    
+    // ПРОВЕРКА: действительно ли файлы в кэше?
+    async function checkIfFilesAreCached() {
+        const cache = await caches.open('cheesecake-v5');
+        const testFile = '/lesson1.html';
+        const cached = await cache.match(testFile);
+        
+        if (cached) {
+            // Файлы есть в кэше — показываем успех
+            showSuccess();
+        } else {
+            // Файлов нет — сбрасываем статус
+            localStorage.removeItem('offline_files_downloaded');
+            resetProgress();
+        }
+    }
+    
+    // Запускаем проверку
+    checkIfFilesAreCached();
+    
+    downloadBtn.addEventListener('click', async () => {
+        if (isDownloading) return;
+        isDownloading = true;
+        downloadBtn.disabled = true;
+        downloadBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Загрузка...';
+        downloadStatus.textContent = 'Начинаем загрузку...';
+        
+        await downloadAllFiles(
+            (percent, downloaded, total) => updateProgress(percent, downloaded, total),
+            () => {
+                isDownloading = false;
+                showSuccess();
+            },
+            (file, error) => {
+                console.error('Ошибка:', file);
+                downloadStatus.textContent = `Ошибка при загрузке ${file}. Проверьте интернет и попробуйте снова.`;
+                downloadBtn.disabled = false;
+                downloadBtn.innerHTML = '<i class="fas fa-download"></i> Попробовать снова';
+                isDownloading = false;
             }
-            
+        );
+    });
+}            
             function showSuccess() {
                 progressPercent.style.display = 'none';
                 if (successIcon) successIcon.style.display = 'block';
