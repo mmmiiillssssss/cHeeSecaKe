@@ -245,7 +245,32 @@
             font-size: 0.6rem;
             color: #4CAF50;
         }
-
+/* Блок предупреждения об офлайн-синхронизации */
+.offline-warning-section {
+    background: #FFF8E1;
+    border-radius: 24px;
+    padding: 1.5rem;
+    border: 1px solid #FFE082;
+    margin-top: 1rem;
+}
+.offline-warning-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #FF8F00;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.offline-warning-content p {
+    font-size: 0.85rem;
+    color: #5d4037;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+.offline-warning-content strong {
+    color: #FF8F00;
+}
         /* Блок загрузки офлайн-режима */
         .offline-download-section {
             background: white;
@@ -709,6 +734,17 @@
                         <div class="days-grid">${daysHtml}</div>
                     </div>
                 </div>
+                <!-- Блок предупреждения об офлайн-синхронизации -->
+<div class="offline-warning-section">
+    <div class="offline-warning-title">
+        <i class="fas fa-wifi"></i> Офлайн-режим
+    </div>
+    <div class="offline-warning-content">
+        <p>📱 Если вы проходите уроки <strong>без интернета</strong>, ваш прогресс сохраняется локально.</p>
+        <p>🔄 Чтобы разблокировать следующий урок и синхронизировать прогресс с сервером, <strong>нажмите на кнопку "Синхронизировать прогресс"</strong> при появлении интернета.</p>
+        <p>✅ После синхронизации все пройденные уроки будут отмечены как завершённые.</p>
+    </div>
+</div>
             `;
             
             // ========== ОБРАБОТЧИК АВАТАРА (ИСПРАВЛЕНО) ==========
